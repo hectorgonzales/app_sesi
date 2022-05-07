@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------------------------------------------
-function listar_seac(momento){
-  	var parametros = {'op':'list','momento':momento}
+function listar_seac(fk_sesion,momento){
+  	var parametros = {'op':'list','fk_sesion':fk_sesion,'momento':momento}
     var ct="";
     if(momento=="inicio"){
         ct=$("#ct_list_seac_inicio");
@@ -98,7 +98,7 @@ function form_insertar_seac(){
 		  },
 		  success:  function (response) {
                 UIkit.modal("#frm_box").hide();
-                listar_seac(seac_momento);
+                listar_seac(fk_sesion,seac_momento);
 		  }
   	});
 }
@@ -160,7 +160,7 @@ function form_actualizar_seac(){
 		  },
 		  success:  function (response) {
                 UIkit.modal("#frm_box").hide();
-                listar_seac(seac_momento);
+                listar_seac(fk_sesion,seac_momento);
 		  }
   	});
 }

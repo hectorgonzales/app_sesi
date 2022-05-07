@@ -3,6 +3,7 @@ require_once('Conexion.php');
 class Sesion{
 private $fk_usuario;
 private $fk_ud;
+private $sesi_orden;
 private $sesi_docente;
 private $sesi_anio;
 private $sesi_periodo;
@@ -35,7 +36,9 @@ private $inicio_estrategia;
 private $desarrollo_estrategia;
 private $cierre_estrategia;
 private $eva_indicador_logro;
+private $fk_eva_tecnica;
 private $eva_tecnicas;
+private $fk_eva_tecnica_instrumento;
 private $eva_instrumentos;
 private $eva_peso;
 private $eva_momento;
@@ -46,6 +49,7 @@ private $tb="sesion";
 private $tb_pk="pk_sesion";
 public function __construct($fk_usuario="",
 						$fk_ud="",
+						$sesi_orden="",
 						$sesi_docente="",
 						$sesi_anio="",
 						$sesi_periodo="",
@@ -78,7 +82,9 @@ public function __construct($fk_usuario="",
 						$desarrollo_estrategia="",
 						$cierre_estrategia="",
 						$eva_indicador_logro="",
+						$fk_eva_tecnica="",
 						$eva_tecnicas="",
+						$fk_eva_tecnica_instrumento="",
 						$eva_instrumentos="",
 						$eva_peso="",
 						$eva_momento="",
@@ -86,6 +92,7 @@ public function __construct($fk_usuario="",
 						$biblio_estudiante=""){
 							$this->fk_usuario=$fk_usuario;
 							$this->fk_ud=$fk_ud;
+							$this->sesi_orden=$sesi_orden;
 							$this->sesi_docente=$sesi_docente;
 							$this->sesi_anio=$sesi_anio;
 							$this->sesi_periodo=$sesi_periodo;
@@ -118,7 +125,9 @@ public function __construct($fk_usuario="",
 							$this->desarrollo_estrategia=$desarrollo_estrategia;
 							$this->cierre_estrategia=$cierre_estrategia;
 							$this->eva_indicador_logro=$eva_indicador_logro;
+							$this->fk_eva_tecnica=$fk_eva_tecnica;
 							$this->eva_tecnicas=$eva_tecnicas;
+							$this->fk_eva_tecnica_instrumento=$fk_eva_tecnica_instrumento;
 							$this->eva_instrumentos=$eva_instrumentos;
 							$this->eva_peso=$eva_peso;
 							$this->eva_momento=$eva_momento;
@@ -148,6 +157,7 @@ public function insertar(){
   $con=new Conexion();
   $sql="insert into ".$this->tb." (fk_usuario,
 						fk_ud,
+						sesi_orden,
 						sesi_docente,
 						sesi_anio,
 						sesi_periodo,
@@ -180,7 +190,9 @@ public function insertar(){
 						desarrollo_estrategia,
 						cierre_estrategia,
 						eva_indicador_logro,
+						fk_eva_tecnica,
 						eva_tecnicas,
+						fk_eva_tecnica_instrumento,
 						eva_instrumentos,
 						eva_peso,
 						eva_momento,
@@ -189,6 +201,7 @@ public function insertar(){
 						) values(
 						'$this->fk_usuario',
 						'$this->fk_ud',
+						'$this->sesi_orden',
 						'$this->sesi_docente',
 						'$this->sesi_anio',
 						'$this->sesi_periodo',
@@ -221,7 +234,9 @@ public function insertar(){
 						'$this->desarrollo_estrategia',
 						'$this->cierre_estrategia',
 						'$this->eva_indicador_logro',
+						'$this->fk_eva_tecnica',
 						'$this->eva_tecnicas',
+						'$this->fk_eva_tecnica_instrumento',
 						'$this->eva_instrumentos',
 						'$this->eva_peso',
 						'$this->eva_momento',
@@ -237,6 +252,7 @@ public function actualizar($pk){
   $con=new Conexion();
   $sql="update ".$this->tb." set fk_usuario='$this->fk_usuario',
 						fk_ud='$this->fk_ud',
+						sesi_orden='$this->sesi_orden',
 						sesi_docente='$this->sesi_docente',
 						sesi_anio='$this->sesi_anio',
 						sesi_periodo='$this->sesi_periodo',
@@ -269,7 +285,9 @@ public function actualizar($pk){
 						desarrollo_estrategia='$this->desarrollo_estrategia',
 						cierre_estrategia='$this->cierre_estrategia',
 						eva_indicador_logro='$this->eva_indicador_logro',
+						fk_eva_tecnica='$this->fk_eva_tecnica',
 						eva_tecnicas='$this->eva_tecnicas',
+						fk_eva_tecnica_instrumento='$this->fk_eva_tecnica_instrumento',
 						eva_instrumentos='$this->eva_instrumentos',
 						eva_peso='$this->eva_peso',
 						eva_momento='$this->eva_momento',

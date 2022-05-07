@@ -18,50 +18,45 @@ switch($op){
 <?php
 case "list":
 ?>
-<table id="tb_lista3" class="tb_lista" width="100%">
-     <thead>
-            <tr>
-            <th>N°</th>
-			<th data-campo="sesi_ud" class="uk-visible@s">SESI_UD</th>
-			            
-	    </tr>
-        </thead>
-    <!--Table body-->        
-    <tbody>
-    	<?php
-		$fk_ud=$_POST['fk_ud'];
-        $condicion="fk_ud='$fk_ud'";        
-			$ds=$general->listarRegistros($tb,$tb_pk,"desc",1,$condicion);
-				
-			$tr=$ds->num_rows;
-			if ($tr==0){
-				echo "<td colspan='32'><div class=\"uk-alert uk-alert-warning uk-margin-top uk-margin-left uk-margin-right\"> No se encontraron registros. </div></td></tr>";
-			}else{
-				$n=1;
-				while($fila=$ds->fetch_array(MYSQLI_ASSOC)){
-                $pk_sesion=$fila['pk_sesion'];
-				?>
-				<tr>
-					<td class="tc bgn" width="30"><?=$n;?></td>
-					<td class="uk-visible@s"><?=$fila['sesi_ud']?></td>
-                    <td class="uk-visible@s tc"><a href="#" onClick="info_general('<?=$pk_sesion?>');"><i uk-icon="icon: info; ratio: 0.7"></i> Inf. General </a></td>
-                    <td class="uk-visible@s tc"><a href="#"><i uk-icon="icon: list; ratio: 0.7"></i> Planificación </a></td>
-                    <td class="uk-visible@s tc"><a href="#"><i uk-icon="icon: settings; ratio: 0.7"></i> Secuencia </a></td>
-                    <td class="uk-visible@s tc"><a href="#"><i uk-icon="icon: thumbnails; ratio: 0.7"></i> Eva/Biblio </a></td>
-								
-				</tr>               
-				<?php
-				$n++;
-				} //fin while
-			} //fin si
-			?>
-    </tbody>
-    <!--Table body-->
-</table>
-<!--Table-->
-<script>
-pasar_un_valor(<?=$tr;?>,'#lb_total_registros');
-</script>
+ 
+    
+    		 <ul uk-grid id="ul_sesiones" class="uk-sortable uk-grid-small uk-grid-match uk-child-width-1-2@s" data-uk-sortable>
+            
+                        <?php
+                        $fk_ud=$_POST['fk_ud'];
+                        $condicion="fk_ud='$fk_ud'";        
+			            $ds=$general->listarRegistros($tb,"sesi_orden","asc",1,$condicion);
+
+                        while($fila=$ds->fetch_array(MYSQLI_ASSOC)){
+                        $pk_sesion=$fila['pk_sesion'];
+                        ?>
+                         <li id="<?=$pk_sesion;?>" class="uk-margin-small-bottom">
+                         	      <div class="uk-card uk-card-default uk-card-body uk-card-hover uk-padding-small" >
+                                      <div class="uk-card-body uk-padding-small">
+                                          <span><?=$fila['sesi_tema']?></span>
+                                      </div>
+                                      <div class="uk-card-footer uk-padding-remove-bottom">
+                                            <a href="#" onClick="info_general('<?=$pk_sesion?>');" class="uk-icon-link" uk-icon="file-edit"></a>
+                                            <a href="#" onClick="form_eliminar_capa('<?=$pk_sesion?>');" class="uk-icon-link" uk-icon="copy"></a>
+                                            <a href="#" onClick="form_eliminar_capa('<?=$pk_sesion?>');" class="uk-icon-link uk-margin-small-right" uk-icon="file-pdf"></a>
+                                            <a href="#" onClick="form_eliminar_capa('<?=$pk_sesion?>');" class="uk-icon-link" uk-icon="trash"></a>
+                                            <span class="uk-badge uk-float-right">Actividad N° <?=$fila['sesi_orden'];?></span>
+                                      </div>
+                                  </div>
+                         </li>
+                        <?php
+                        }
+                        ?>
+                       
+              </ul>
+
+		<script type="text/javascript">
+		   $("#ul_sesiones").on('stop.uk.sortable', function(e, sortable) {
+			   actualizar_ordenar_sesi();
+		   });
+        </script>
+                       
+
 <?php
 break; /*FIN DE LIST*/
 ?>
@@ -132,6 +127,7 @@ $fila_calo=$ds_calo->fetch_assoc();
 
 $fk_usuario=$pk_usuario_login;
 $fk_ud=$_POST['fk_ud'];
+$sesi_orden=0;
 $sesi_docente=addslashes($usuario_nombre_login);
 $sesi_anio=date("Y");
 $sesi_periodo=$periodo;
@@ -150,7 +146,7 @@ $fks_capacidad=$pk_capacidad;
 $sesi_capacidad=addslashes($capa_descripcion);
 $fks_capacidad_logro=$pk_capacidad_logro;
 $sesi_capacidad_logro=addslashes($calo_descripcion);
-$sesi_tema="";
+$sesi_tema="Sin tema";
 $sesi_act_practico=0;
 $sesi_act_teopractico=1;
 $sesi_tipo_presencial=1;
@@ -164,8 +160,10 @@ $inicio_estrategia="Actividad focal introductoria.";
 $desarrollo_estrategia="Organizador visual.";
 $cierre_estrategia="Síntesis, reflexión de los aprendizajes.";
 $eva_indicador_logro="";
-$eva_tecnicas="Observación";
-$eva_instrumentos="Lista de Cotejo";
+$fk_eva_tecnica=1;
+$eva_tecnicas="Observación directa y sistemática";
+$fk_eva_tecnica_instrumento=5;
+$eva_instrumentos="Lista de cotejo";
 $eva_peso="100%";
 $eva_momento="Cierre";
 $biblio_docente="";
@@ -173,6 +171,7 @@ $biblio_estudiante="";
 			
 	$obj = new Sesion($fk_usuario,
 						$fk_ud,
+                        $sesi_orden,
 						$sesi_docente,
 						$sesi_anio,
 						$sesi_periodo,
@@ -205,7 +204,9 @@ $biblio_estudiante="";
                         $desarrollo_estrategia,
                         $cierre_estrategia,
 						$eva_indicador_logro,
+                        $fk_eva_tecnica,
 						$eva_tecnicas,
+                        $fk_eva_tecnica_instrumento,
 						$eva_instrumentos,
 						$eva_peso,
 						$eva_momento,
@@ -413,7 +414,7 @@ $fk_modulo=$fila['fk_modulo'];
                                                   </table>
                                                 </div>
                                                 
-                                                <div class="uk-width-1-1">
+                                                <div class="uk-width-1-1 uk-margin-medium-top">
                                                     <h4 class="uk-text-muted uk-background-muted">PLANIFICACIÓN DEL APRENDIZAJE</h4>
                                                 </div>                                                
                                                 <div class="uk-width-1-1">
@@ -431,14 +432,14 @@ $fk_modulo=$fila['fk_modulo'];
                                                 
 
                                                 <!--ACTIVIDADES-->
+                                                  <div class="uk-width-1-1 uk-margin-medium-top">
+                                                      <h4 class="uk-text-muted uk-background-muted">SECUENCIA DIDÁCTICA</h4>
+                                                  </div>                                                
                                                     <!--inicio-->
                                                     <div class="uk-width-1-1">
                                                         <div uk-grid class="uk-grid-small">
-                                                            <div class="uk-width-1-1">
-                                                                <h4 class="uk-text-muted uk-background-muted">MOMENTO DE INICIO</h4>
-                                                            </div>
                                                             <div class="uk-width-4-5">
-                                                                <label>Estrategia:</label>
+                                                                <label><span class="uk-label">MOMENTO DE INICIO</span> - Estrategia:</label>
                                                                 <input type="text" class="uk-input uk-form-small mayus" id="txt_inicio_estrategia" value="<?=$fila['inicio_estrategia']?>" />
                                                             </div>
 
@@ -456,13 +457,10 @@ $fk_modulo=$fila['fk_modulo'];
                                                     <!--inicio-->
                                                     
                                                     <!--desarrollo-->
-                                                    <div class="uk-width-1-1">
+                                                    <div class="uk-width-1-1 uk-margin-medium-top">
                                                         <div uk-grid class="uk-grid-small">
-                                                            <div class="uk-width-1-1">
-                                                                <h4 class="uk-text-muted uk-background-muted">MOMENTO DE DESARROLLO</h4>
-                                                            </div>
                                                             <div class="uk-width-4-5">
-                                                                <label>Estrategia:</label>
+                                                                <label><span class="uk-label">MOMENTO DE DESARROLLO</span> - Estrategia:</label>
                                                                 <input type="text" class="uk-input uk-form-small mayus" id="txt_desarrollo_estrategia" value="<?=$fila['desarrollo_estrategia']?>" />
                                                             </div>
 
@@ -480,13 +478,10 @@ $fk_modulo=$fila['fk_modulo'];
                                                     <!--desarrollo-->
 
                                                     <!--cierre-->
-                                                    <div class="uk-width-1-1">
+                                                    <div class="uk-width-1-1 uk-margin-medium-top">
                                                         <div uk-grid class="uk-grid-small">
-                                                            <div class="uk-width-1-1">
-                                                                <h4 class="uk-text-muted uk-background-muted">MOMENTO DE CIERRE</h4>
-                                                            </div>
                                                             <div class="uk-width-4-5">
-                                                                <label>Estrategia:</label>
+                                                                <label><span class="uk-label">MOMENTO DE CIERRE</span> - Estrategia:</label>
                                                                 <input type="text" class="uk-input uk-form-small mayus" id="txt_cierre_estrategia" value="<?=$fila['cierre_estrategia']?>" />
                                                             </div>
 
@@ -506,7 +501,7 @@ $fk_modulo=$fila['fk_modulo'];
                                                 <!--ACTIVIDADES-->
                                                 
                                                 <!--EVALUACION-->
-                                                    <div class="uk-width-1-1">
+                                                    <div class="uk-width-1-1 uk-margin-medium-top">
                                                         <h4 class="uk-text-muted uk-background-muted">ACTIVIDADES DE EVALUACIÓN</h4>
                                                     </div>
                                                             
@@ -514,26 +509,59 @@ $fk_modulo=$fila['fk_modulo'];
                                                         <label>Indicadores de logro de la sesión:</label>
                                                         <textarea rows="2" class="uk-textarea uk-form-small" id="txt_eva_indicador_logro"><?=$fila['eva_indicador_logro']?></textarea>
                                                     </div>
-                                                    <div class="uk-width-1-4">
+                                                    <div class="uk-width-2-5">
                                                         <label>Técnicas:</label>
-                                                        <input type="text" class="uk-input uk-form-small mayus" id="txt_eva_tecnicas" value="<?=$fila['eva_tecnicas']?>" />
+                                                        <select class="uk-select uk-form-small" id="txt_eva_tecnicas">
+                                                        <?php
+                                                            $fk_eva_tecnica=$fila['fk_eva_tecnica'];
+                                                            $fk_eva_tecnica_instrumento=$fila['fk_eva_tecnica_instrumento'];
+
+                                                              $ds_tec=$general->listarRegistros("eva_tecnica","pk_eva_tecnica","asc");
+                                                              while($fila_tec=$ds_tec->fetch_array(MYSQLI_ASSOC)){
+                                                                $pk_eva_tecnica=$fila_tec['pk_eva_tecnica'];
+                                                                  ?>
+                                                                  <option onClick="listar_eva_tec_instrumentos('<?=$pk_eva_tecnica?>','<?=$fk_eva_tecnica_instrumento?>')" value="<?=$pk_eva_tecnica?>" <?php if($fila['fk_eva_tecnica']==$pk_eva_tecnica){echo "selected='selected'";}?>><?=$fila_tec['evte_descripcion']?></option>
+                                                              <?php 
+                                                              }//end while?>
+                                                        </select>    
                                                     </div>
-                                                    <div class="uk-width-1-4">
+                                                    
+                                                    <div class="uk-width-1-5">
                                                         <label>Instrumentos:</label>
-                                                        <input type="text" class="uk-input uk-form-small mayus" id="txt_eva_instrumentos" value="<?=$fila['eva_instrumentos']?>" />
+                                                        <select class="uk-select uk-form-small" id="txt_eva_instrumentos">
+                                                            <!--intrumentos-->
+                                                        </select>    
+                                                        
                                                     </div>
-                                                    <div class="uk-width-1-4">
+                                                    <div class="uk-width-1-5">
                                                         <label>Peso o Porcentaje:</label>
-                                                        <input type="text" class="uk-input uk-form-small mayus" id="txt_eva_peso" value="<?=$fila['eva_peso']?>" />
+                                                        <select id="txt_eva_peso" class="uk-select uk-form-small">
+                                                            <?php 
+                                                            for($p=100;$p>1;$p-=5){
+                                                            $por=$p."%";
+                                                            ?>
+                                                            <option <?php if($fila['eva_peso']==$por){echo "selected='selected'";}?>><?=$por?></option>
+                                                            <?php
+                                                            }
+                                                            ?>
+                                                        </select>
                                                     </div>
-                                                    <div class="uk-width-1-4">
+                                                    <div class="uk-width-1-5">
                                                         <label>Momento:</label>
-                                                        <input type="text" class="uk-input uk-form-small mayus" id="txt_eva_momento" value="<?=$fila['eva_momento']?>" />
+                                                        <select class="uk-select uk-form-small" id="txt_eva_momento">
+                                                        <?php
+                                                              $ds_mo=$general->listarRegistros("eva_momento","pk_eva_momento","asc");
+                                                              while($fila_mo=$ds_mo->fetch_array(MYSQLI_ASSOC)){
+                                                                  ?>
+                                                                  <option <?php if($fila['eva_momento']==$fila_mo['evmo_descripcion']){echo "selected='selected'";}?>><?=$fila_mo['evmo_descripcion']?></option>
+                                                              <?php 
+                                                              }//end while?>n>
+                                                        </select>
                                                     </div>                                               
                                                 <!--EVALUACION-->
                                                 
                                                 <!--BIBLIO-->
-                                                    <div class="uk-width-1-1">
+                                                    <div class="uk-width-1-1 uk-margin-medium-top">
                                                         <h4 class="uk-text-muted uk-background-muted">BIBLIOGRAFÍA</h4>
                                                     </div>                                                
                                                     <div class="uk-width-1-1">
@@ -569,9 +597,10 @@ $fk_modulo=$fila['fk_modulo'];
 
 <script>
 listar_capacidad_logro('<?=$fks_capacidad_logro?>');
-listar_seac("inicio");
-listar_seac("desarrollo");
-listar_seac("cierre");
+listar_seac("<?=$pk?>","inicio");
+listar_seac("<?=$pk?>","desarrollo");
+listar_seac("<?=$pk?>","cierre");
+listar_eva_tec_instrumentos('<?=$fk_eva_tecnica?>','<?=$fk_eva_tecnica_instrumento?>');
 </script>
 <?php
 break; //FIN DE NEW
@@ -633,6 +662,37 @@ case "pasar_capacidad_logro":
     ?>
 <?php
 break; //FIN DE NEW
+?>
+
+<?php
+case "listar_eva_tec_instrumentos":
+?>
+          <?php
+            $pk_eva_tecnica=$_POST['pk_eva_tecnica'];                                        
+            $fk_eva_tecnica_instrumento=$_POST['fk_eva_tecnica_instrumento'];      
+            $ds=$general->listarRegistros("eva_tecnica_instrumento","pk_eva_tecnica_instrumento","asc",1,"fk_eva_tecnica='$pk_eva_tecnica'");
+            while($fila=$ds->fetch_array(MYSQLI_ASSOC)){
+              $pk_eva_tecnica_instrumento=$fila['pk_eva_tecnica_instrumento'];
+                ?>
+                <option value="<?=$pk_eva_tecnica_instrumento?>" <?php if($pk_eva_tecnica_instrumento==$fk_eva_tecnica_instrumento){echo "selected='selected'";}?>><?=$fila['etin_descripcion']?></option>
+            <?php 
+            }
+
+    ?>
+<?php
+break; //FIN DE NEW
+?>
+
+<?php
+case "actualizar_ordenar_sesi":
+?>
+<?php
+$a_orden = json_decode($_POST['orden']);
+foreach($a_orden as $sesion){
+	$pk=$sesion->pk;
+	$orden=$sesion->orden;	
+	$general->modificarCampos("sesion","sesi_orden='$orden'",1,"pk_sesion='$pk'");
+} 
 ?>
 
 <?php

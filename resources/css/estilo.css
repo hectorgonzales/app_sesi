@@ -107,10 +107,10 @@ h1, h2, h3, h4, h5, h6 {
 .tb_lista th{ background:#1A65E9; color:#fff;  border:1px solid #ddd; font-weight:normal; cursor:default}
 .tb_lista tr:hover{background:#92C9E8; color:#000; cursor:pointer}
 
-.tb_lista2{ font-size:8.5pt;border-collapse: collapse;}
+.tb_lista2{ font-size:9pt;border-collapse: collapse;}
 .tb_lista2 td{padding:0 2px !important; border:1px solid #ddd;}
 .tb_lista2 th{ background:#99C; color:#fff; font-weight:normal; cursor:default}
-.tb_lista2 tr:hover{background:#cdcdee; color:#000; cursor:pointer}
+/*.tb_lista2 tr:hover{background:#cdcdee; color:#000; cursor:pointer}*/
 
 .tb_lista3{ font-size:8.5pt;border-collapse: collapse;}
 .tb_lista3 td{padding:2px 4px !important; border:1px solid #ddd;}

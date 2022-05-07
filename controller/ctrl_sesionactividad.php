@@ -13,9 +13,10 @@ switch($op){
 case "list":
 ?>
 <?php
+$fk_sesion=$_POST['fk_sesion'];
 $momento=$_POST['momento'];
 ?>
-<table id="tb_lista" class="tb_lista" width="100%">
+<table id="tb_lista" class="tb_lista3" width="100%">
      <thead>
             <tr>
             <th>N°</th>
@@ -29,7 +30,8 @@ $momento=$_POST['momento'];
     <!--Table body-->        
     <tbody>
     	<?php
-			$ds=$general->listarRegistros($tb,$tb_pk,"asc",1,"seac_momento='$momento'");			        	
+        
+			$ds=$general->listarRegistros($tb,$tb_pk,"asc",1,"seac_momento='$momento' AND fk_sesion='$fk_sesion'");			        	
 			$tr=$ds->num_rows;
 			if ($tr==0){
 				echo "<td colspan='6'><div class=\"uk-alert uk-alert-warning uk-margin-top uk-margin-left uk-margin-right\"> No se encontraron registros. </div></td></tr>";

@@ -13,7 +13,7 @@ function listar_sesi(){
 		  },
 		  success:  function (response) {
 				  $("#ct_form_body_sesi").html(response);
-                  tb_seleccionar_fila_lista('#tb_lista3',3);
+                  //tb_seleccionar_fila_lista('#tb_lista3',3);
 		  }
   	});
 }
@@ -109,6 +109,52 @@ function pasar_capacidad_logro(){
 		  }
   	});
 }
+
+//--------------------------------------------------------------------------------------------------------
+function listar_eva_tec_instrumentos(pk_eva_tecnica, fk_eva_tecnica_instrumento){
+    
+  	var parametros = {'op':'listar_eva_tec_instrumentos','pk_eva_tecnica':pk_eva_tecnica,'fk_eva_tecnica_instrumento':fk_eva_tecnica_instrumento}
+  	$.ajax({
+		  data:  parametros,
+		  cache: false,
+		  url:  'controller/ctrl_sesion.php',
+		  type:  'post',
+		  beforeSend: function () {
+				  $("#txt_eva_instrumentos").html("");
+		  },
+		  success:  function (response) {
+				  $("#txt_eva_instrumentos").html(response);			  
+		  }
+  	});
+}
+
+
+//--------------------------------------------------------------------------------------------------------
+function actualizar_ordenar_sesi(){
+	var orden ="";
+	var nuevo_orden =new Array();;
+	$('#ul_sesiones').find('li').each(function(i) {
+	  var obj=new Object();
+	  obj.pk=$(this).attr('id');
+	  obj.orden=$(this).index()+1;
+	  nuevo_orden.push(obj);
+	});
+	orden = JSON.stringify(nuevo_orden);
+	
+	var parametros = {'op':'actualizar_ordenar_sesi','orden':orden}
+  	$.ajax({
+		  data:  parametros,
+		  cache: false,
+		  url: 'controller/ctrl_sesion.php',
+		  type: 'post',
+		  beforeSend: function () {
+		  },
+		  success:  function (response) {
+                   listar_sesi();
+		  }
+  	});
+}
+
 
 //--------------------------------------------------------------------------------------------------------
 function validaForm_sesi(op_frm) {  //1 ADD 2 EDIT
