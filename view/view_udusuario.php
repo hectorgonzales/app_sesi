@@ -18,7 +18,7 @@ case "main":
 ?>
 <div uk-grid class="uk-grid-small">
   
-      <div class="uk-width-1-2">
+      <div class="uk-width-2-5">
             <div class="uk-card uk-card-default">
                   <div class="uk-card-header bg-card-header-1 uk-padding-small">
                    	<!--btns-->
@@ -50,7 +50,7 @@ case "main":
       </div>
 
 
-      <div class="uk-width-1-2">
+      <div class="uk-width-3-5">
             <div class="uk-card uk-card-default">
                   <div class="uk-card-header bg-card-header-1 uk-padding-small">
                    	<!--btns-->
@@ -62,7 +62,7 @@ case "main":
                         </div>
                  
                         <div class="uk-width-1-2@s uk-padding-remove">
-                            <input type="text" id="txt_fk_ud">
+                            <input type="hidden" id="txt_fk_ud_usuario">
                             <div class="uk-float-right">
                                 <a href="#" onClick="form_insertar_sesi();" class="uk-icon-link" uk-icon="plus-circle"></a>
                             </div>
@@ -96,7 +96,7 @@ case "new":
         <div class="uk-card uk-card-default uk-card-body uk-padding-small">
           <div class="uk-grid-small" uk-grid>
                     <!--CAMPOS-->
-                        <input type="hidden" id="txt_fk_ud">
+                        <input type="hidden" id="txt_fk_ud_2">
                         
                         <div class="uk-width-1-1@s">
                           <label>Seleccione Programa de Estudio:</label>

@@ -2,6 +2,7 @@
 require_once('Conexion.php');
 class Sesion{
 private $fk_usuario;
+private $fk_ud_usuario;
 private $fk_ud;
 private $sesi_orden;
 private $sesi_docente;
@@ -48,6 +49,7 @@ private $biblio_estudiante;
 private $tb="sesion";
 private $tb_pk="pk_sesion";
 public function __construct($fk_usuario="",
+						$fk_ud_usuario="",
 						$fk_ud="",
 						$sesi_orden="",
 						$sesi_docente="",
@@ -91,6 +93,7 @@ public function __construct($fk_usuario="",
 						$biblio_docente="",
 						$biblio_estudiante=""){
 							$this->fk_usuario=$fk_usuario;
+							$this->fk_ud_usuario=$fk_ud_usuario;
 							$this->fk_ud=$fk_ud;
 							$this->sesi_orden=$sesi_orden;
 							$this->sesi_docente=$sesi_docente;
@@ -156,6 +159,7 @@ public function __set($attr,$val){
 public function insertar(){
   $con=new Conexion();
   $sql="insert into ".$this->tb." (fk_usuario,
+						fk_ud_usuario,
 						fk_ud,
 						sesi_orden,
 						sesi_docente,
@@ -200,6 +204,7 @@ public function insertar(){
 						biblio_estudiante
 						) values(
 						'$this->fk_usuario',
+						'$this->fk_ud_usuario',
 						'$this->fk_ud',
 						'$this->sesi_orden',
 						'$this->sesi_docente',
@@ -251,6 +256,7 @@ public function insertar(){
 public function actualizar($pk){
   $con=new Conexion();
   $sql="update ".$this->tb." set fk_usuario='$this->fk_usuario',
+						fk_ud_usuario='$this->fk_ud_usuario',
 						fk_ud='$this->fk_ud',
 						sesi_orden='$this->sesi_orden',
 						sesi_docente='$this->sesi_docente',

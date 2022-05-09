@@ -79,9 +79,9 @@ function form_nuevo_udus(){
 
 //--------------------------------------------------------------------------------------------------------
 function validaForm_udus(op_frm) {  //1 ADD 2 EDIT
-	var a=$("#txt_fk_ud").val();
+	var a=$("#txt_fk_ud_2").val();
 	
-	var msg=$("#frm_msg_error");
+	var msg=$("#frm_msg_error2");
 	
 	if(a=="" || a==null){	
 		msg.html("<i uk-icon='warning'></i> Debe seleccionar una Unidad Didactica.");		
@@ -101,7 +101,7 @@ function validaForm_udus(op_frm) {  //1 ADD 2 EDIT
 
 //--------------------------------------------------------------------------------------------------------
 function form_insertar_udus(){	
-		var fk_ud=$('#txt_fk_ud').val();
+		var fk_ud=$('#txt_fk_ud_2').val();
 		var parametros = {'op':'insert',
 						'fk_ud':fk_ud}
   	$.ajax({
@@ -134,6 +134,8 @@ function form_eliminar_udus(pk){
 			  success:  function (response) {
 					msg_popup("<i uk-icon='check'></i> Registro eliminado.");
 					listar_udus();
+                    listar_sesi();
+                    $('#txt_fk_ud').val('');
 			  }
 	  	});	
 		

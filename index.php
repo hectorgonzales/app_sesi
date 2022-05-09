@@ -22,7 +22,7 @@ $general=new General();
             <div class="uk-container">
                 <div class="uk-grid-margin uk-grid uk-grid-stack" uk-grid="uk-grid">
                     <div class="uk-width-1-1@m">
-                        <div class="uk-margin uk-width-large uk-margin-auto uk-card uk-card-default uk-card-body uk-box-shadow-large">
+                        <div class="uk-margin uk-width-large uk-margin-auto uk-card uk-card-default uk-card-body uk-box-shadow-large uk-text-center">
                             <img src="resources/images/logo_blue.png" class="uk-margin-bottom" height="200">
                             <form method="post" action="procesar.php">
                             	
@@ -40,7 +40,7 @@ $general=new General();
                                 </div>
                                 
                                 <div class="uk-margin">
-                                    <button class="uk-button uk-button-red uk-button-large uk-width-1-1">Iniciar Sesión</button>
+                                    <button class="uk-button uk-button-primary uk-button-large uk-width-1-1">Iniciar Sesión</button>
                                 </div>
                             </form>
                         </div>

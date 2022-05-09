@@ -89,7 +89,7 @@ switch($p){
             </div>
             
             <div class="uk-navbar-center">
-            		<span class="uk-text-large"><span class="uk-visible@s">ALMACEN</span></span>
+            		<span class="uk-text-large"><span class="uk-visible@s"></span></span>
             </div>
             
             <div class="uk-navbar-right uk-light">

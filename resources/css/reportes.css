@@ -1,0 +1,58 @@
+.tabla{
+	font-size:8.5pt;
+    border-collapse: collapse;
+	}
+
+.tabla td{
+        border:0.1px solid black;
+        border-collapse: collapse;
+	}
+
+.tabla th{
+	background-color:#39C;
+	color:#fff;
+	font-weight:bolder;
+    border:0.1px solid black;
+    border-collapse: collapse;
+	}
+
+.tc{text-align:center}
+.tr{text-align:right}
+
+
+
+.b{ font-weight: bold;}
+
+.bb{ font-weight: bold; color: #1A97CB}
+
+.pad1{padding-top:20px;padding-left:20px}
+
+.t1{
+	text-align:center;
+	font-size:14pt;
+}
+.t3{
+	text-align:center;
+    font-weight:bolder;
+}
+
+.t2{
+	font-size:10pt;
+}
+
+
+.bg1{background-color:#eee}
+
+.rotate {
+/* Safari */
+-webkit-transform: rotate(-90deg);
+/* Firefox */
+-moz-transform: rotate(-90deg);
+/* IE */
+-ms-transform: rotate(-90deg);
+/* Opera */
+-o-transform: rotate(-90deg);
+float: left;
+}
+
+ol li {list-style-type:decimal;color:green;}

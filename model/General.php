@@ -1,7 +1,38 @@
 <?php
 require_once('Conexion.php');
 class General{
-	
+
+	public function duplicarRegistro($tb,$campo_pk,$pk,$cond="0",$cond_string="",$remp="0",$campos_reemplazar=""){ //se creo en app_proforma
+		$con=new Conexion();
+		$ds=$con->query("describe ".$tb);
+		$c=1;
+		$campos="";
+		while($fila=$ds->fetch_array(MYSQLI_ASSOC)){
+			if($c>1){
+				$campos.=$fila['Field'].",";
+			}
+			$c++;
+		}
+		$camposTabla=substr($campos,0,-1);
+		$camposTabla2=$camposTabla;
+		if($remp=="1"){
+			foreach($campos_reemplazar as $campo=>$valor){
+				$camposTabla2=str_replace($campo, $valor, $camposTabla);		
+			}
+		}
+		//=============================================
+		if($cond=="0"){
+			$sql="INSERT INTO ".$tb." (".$camposTabla.") SELECT ".$camposTabla2." FROM ".$tb." WHERE ".$campo_pk."='$pk'";
+		}else{
+			$sql="INSERT INTO ".$tb." (".$camposTabla.") SELECT ".$camposTabla2." FROM ".$tb." WHERE ".$cond_string;
+		}
+		$con->query($sql);
+		$return_query=$con->affected_rows;
+		$con->close();
+		
+		return $return_query;
+	}
+    
 
 	public function getNumeroRegistros($tb,$cond="0",$cond_string=""){
 	  $con=new Conexion();

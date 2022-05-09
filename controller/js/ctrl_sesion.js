@@ -1,8 +1,8 @@
 //--------------------------------------------------------------------------------------------------------
 function listar_sesi(){
-    var fk_ud=$('#txt_fk_ud').val();
+    var fk_ud_usuario=$('#txt_fk_ud_usuario').val();
 
-  	var parametros = {'op':'list','fk_ud':fk_ud}
+  	var parametros = {'op':'list','fk_ud_usuario':fk_ud_usuario}
   	$.ajax({
 		  data:  parametros,
 		  cache: false,
@@ -13,28 +13,31 @@ function listar_sesi(){
 		  },
 		  success:  function (response) {
 				  $("#ct_form_body_sesi").html(response);
-                  //tb_seleccionar_fila_lista('#tb_lista3',3);
 		  }
   	});
 }
 
 function form_insertar_sesi(){	
-		var fk_ud=$('#txt_fk_ud').val();
-		var parametros = {'op':'insert',
-						'fk_ud':fk_ud,
+		var fk_ud_usuario=$('#txt_fk_ud_usuario').val();
+        if(fk_ud_usuario>0){
+		  var parametros = {'op':'insert',
+						'fk_ud_usuario':fk_ud_usuario,
 						}
-  	$.ajax({
-		  data:  parametros,
-		  cache: false,		  
-		  url:  'controller/ctrl_sesion.php',
-		  type: 'post',
-		  beforeSend: function () {
-				 $("#ct_form_body_sesi").html("<div class='uk-text-center uk-text-primary uk-margin-top'><div uk-spinner></div> Procesando...</div>");
-		  },
-		  success:  function (response) {
-				 listar_sesi();
-		  }
-  	});
+            $.ajax({
+                  data:  parametros,
+                  cache: false,		  
+                  url:  'controller/ctrl_sesion.php',
+                  type: 'post',
+                  beforeSend: function () {
+                         $("#ct_form_body_sesi").html("<div class='uk-text-center uk-text-primary uk-margin-top'><div uk-spinner></div> Procesando...</div>");
+                  },
+                  success:  function (response) {
+                         listar_sesi();
+                  }
+            });
+        }else{
+            msg_popup("<i uk-icon='info'></i> Debe seleccionar una Unidad Didactica.","danger","1500");
+        }
 }
 
 //--------------------------------------------------------------------------------------------------------
@@ -128,6 +131,22 @@ function listar_eva_tec_instrumentos(pk_eva_tecnica, fk_eva_tecnica_instrumento)
   	});
 }
 
+//--------------------------------------------------------------------------------------------------------
+function duplicar_sesion(pk){
+    
+  	var parametros = {'op':'duplicar_sesion','pk':pk}
+  	$.ajax({
+		  data:  parametros,
+		  cache: false,
+		  url:  'controller/ctrl_sesion.php',
+		  type:  'post',
+		  beforeSend: function () {
+		  },
+		  success:  function (response) {
+              listar_sesi();		  
+		  }
+  	});
+}
 
 //--------------------------------------------------------------------------------------------------------
 function actualizar_ordenar_sesi(){
@@ -205,6 +224,20 @@ function form_actualizar_sesi_general(){
 		var plap_indicador_competencia=$('#txt_plap_indicador_competencia').val();
 		var plap_indicador_capacidad=$('#txt_plap_indicador_capacidad').val();
 		var plap_logro_sesion=$('#txt_plap_logro_sesion').val();
+        var inicio_estrategia=$('#txt_inicio_estrategia').val();
+		var desarrollo_estrategia=$('#txt_desarrollo_estrategia').val();
+		var cierre_estrategia=$('#txt_cierre_estrategia').val();
+        var eva_indicador_logro=$('#txt_eva_indicador_logro').val();
+		var fk_eva_tecnica=$('#txt_eva_tecnicas').val();
+		var eva_tecnicas=$('#txt_eva_tecnicas option:selected').text();
+        
+        var fk_eva_tecnica_instrumento=$('#txt_eva_instrumentos').val();
+		var eva_instrumentos=$('#txt_eva_instrumentos option:selected').text();
+		var eva_peso=$('#txt_eva_peso').val();
+		var eva_momento=$('#txt_eva_momento').val();
+		var biblio_docente=$('#txt_biblio_docente').val();
+		var biblio_estudiante=$('#txt_biblio_estudiante').val();
+        
         
 		var parametros =  {'op':'update_general','pk':pk,
 						'sesi_horas':sesi_horas,
@@ -223,7 +256,20 @@ function form_actualizar_sesi_general(){
 						'sesi_fecha':sesi_fecha,
 						'plap_indicador_competencia':plap_indicador_competencia,
 						'plap_indicador_capacidad':plap_indicador_capacidad,
-						'plap_logro_sesion':plap_logro_sesion
+						'plap_logro_sesion':plap_logro_sesion,
+                        'inicio_estrategia':inicio_estrategia,
+						'desarrollo_estrategia':desarrollo_estrategia,
+						'cierre_estrategia':cierre_estrategia,
+                        'eva_indicador_logro':eva_indicador_logro,
+                        'fk_eva_tecnica':fk_eva_tecnica,
+						'eva_tecnicas':eva_tecnicas,
+                        
+						'fk_eva_tecnica_instrumento':fk_eva_tecnica_instrumento,
+						'eva_instrumentos':eva_instrumentos,
+						'eva_peso':eva_peso,
+						'eva_momento':eva_momento,
+						'biblio_docente':biblio_docente,
+						'biblio_estudiante':biblio_estudiante
 						}
   	$.ajax({
 		  data:  parametros,
@@ -240,9 +286,8 @@ function form_actualizar_sesi_general(){
 }
 
 //--------------------------------------------------------------------------------------------------------
-function form_eliminar_sesi(){
+function form_eliminar_sesi(pk){
 	UIkit.modal.confirm('Desea eliminar el Registro?.', {labels:{ ok: 'Si', cancel:'No'}}).then(function() {
-    	var pk=$("#txt_pk_hidden").val();
   		var parametros = {'op':'delete','pk':pk}
 	  	$.ajax({
 			  data:  parametros,
@@ -253,7 +298,9 @@ function form_eliminar_sesi(){
 			  },
 			  success:  function (response) {
 					msg_popup("<i uk-icon='check'></i> Registro eliminado.");
-					quitar_fila_lista(pk);
+					listar_sesi();
+                    //actualizar_ordenar_sesi();
+                    
 			  }
 	  	});	
 		
@@ -263,22 +310,16 @@ function form_eliminar_sesi(){
 	
 }
 
-//--------------------------------------------------------------------------------------------------------
-/*
-function form_eliminar_sesi(){
-	var pk=$("#lista_txt_pk_hidden").val();
-  	var parametros = {'op':'delete','pk':pk}
-  	$.ajax({
-		  data:  parametros,
-		  cache: false,		  
-		  url:   'controller/ctrl_sesion.php',
-		  type:  'post',
-		  beforeSend: function () {
-				 //$("#ct_form_body").html("<div class='uk-text-center uk-text-primary uk-margin-top'><div uk-spinner></div> Procesando...</div>");
-		  },
-		  success:  function (response) {		  
-				 quitar_fila_lista(pk);
-		  }
-  	});
+
+
+//=============================================================
+function ver_sesion_pdf(pk){
+	if(pk>0){
+		var url='reports/ctrl_reporte_sesion.php?pk_sesion='+pk;
+		ver_msg_modal_pdf("ACTIVIDAD DE APRENDIZAJE",url,"70%","600px");
+	}else{
+		msg_popup("<i class='uk-icon-check'></i> Seleccione un registro.","danger");
+	}
 }
-*/
+
+

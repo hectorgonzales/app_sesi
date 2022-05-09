@@ -343,6 +343,23 @@ function ver_barras(ct,op){
   });
 }
 
+//======MSGS MODAL PDF======================	
+function ver_msg_modal_pdf(titulo,url,ancho="350px",alto="100px",boton="cerrar"){
+		$("#frm_box_cuerpo_l2").css('width',ancho);
+		$("#frm_box_centro_l2").css('height',alto);
+		var t=$("#frm_box_header_l2")
+		var c=$("#frm_box_centro_l2")
+		var p=$("#frm_box_foot_l2")
+		t.html("<h4>"+titulo+"</h4>");
+		c.html('<iframe src="'+url+'" style="width:100%;height:100%"></iframe>');
+		if(boton=="cerrar"){
+			p.html("<button type='button' class='uk-button uk-modal-close'>Cerrar</button>");;
+		}else{
+			p.html("");
+		}
+		UIkit.modal('#frm_box_l2', {center: true, modal: false,bgclose:false}).show();	
+}
+
 //--------------------------------BOX MSG ESPERA----------------------------------------------------------------------	
 function ver_msg_box(titulo,msg){
 		$("#frm_box_cuerpo_l2").css('width','350px');

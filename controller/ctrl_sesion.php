@@ -20,12 +20,12 @@ case "list":
 ?>
  
     
-    		 <ul uk-grid id="ul_sesiones" class="uk-sortable uk-grid-small uk-grid-match uk-child-width-1-2@s" data-uk-sortable>
+    		 <ul uk-grid id="ul_sesiones" class="uk-sortable uk-grid-small uk-grid-match uk-child-width-1-3@s" data-uk-sortable>
             
                         <?php
-                        $fk_ud=$_POST['fk_ud'];
-                        $condicion="fk_ud='$fk_ud'";        
-			            $ds=$general->listarRegistros($tb,"sesi_orden","asc",1,$condicion);
+                        $fk_ud_usuario=$_POST['fk_ud_usuario'];
+                        $condicion="fk_ud_usuario='$fk_ud_usuario'";        
+			            $ds=$general->listarRegistros($tb,"sesi_orden","desc",1,$condicion);
 
                         while($fila=$ds->fetch_array(MYSQLI_ASSOC)){
                         $pk_sesion=$fila['pk_sesion'];
@@ -35,11 +35,11 @@ case "list":
                                       <div class="uk-card-body uk-padding-small">
                                           <span><?=$fila['sesi_tema']?></span>
                                       </div>
-                                      <div class="uk-card-footer uk-padding-remove-bottom">
+                                      <div class="uk-card-footer uk-padding-remove-horizontal uk-padding-remove-bottom">
                                             <a href="#" onClick="info_general('<?=$pk_sesion?>');" class="uk-icon-link" uk-icon="file-edit"></a>
-                                            <a href="#" onClick="form_eliminar_capa('<?=$pk_sesion?>');" class="uk-icon-link" uk-icon="copy"></a>
-                                            <a href="#" onClick="form_eliminar_capa('<?=$pk_sesion?>');" class="uk-icon-link uk-margin-small-right" uk-icon="file-pdf"></a>
-                                            <a href="#" onClick="form_eliminar_capa('<?=$pk_sesion?>');" class="uk-icon-link" uk-icon="trash"></a>
+                                            <a href="#" onClick="duplicar_sesion('<?=$pk_sesion?>');" class="uk-icon-link" uk-icon="copy"></a>
+                                            <a href="#" onClick="ver_sesion_pdf('<?=$pk_sesion?>');" class="uk-icon-link uk-margin-small-right" uk-icon="file-pdf"></a>
+                                            <a href="#" onClick="form_eliminar_sesi('<?=$pk_sesion?>');" class="uk-icon-link" uk-icon="trash"></a>
                                             <span class="uk-badge uk-float-right">Actividad N° <?=$fila['sesi_orden'];?></span>
                                       </div>
                                   </div>
@@ -68,9 +68,11 @@ case "insert":
 ?>
 <?php
 //==ud-carrera
-$fk_ud=$_POST['fk_ud'];
-$ds_ud=$general->modificarRegistro("ud inner join menu on fk_carrera=pk_menu","pk_ud",$fk_ud);
+$fk_ud_usuario=$_POST['fk_ud_usuario'];
+
+$ds_ud=$general->modificarRegistro("ud_usuario inner join ud on fk_ud=pk_ud inner join menu on fk_carrera=pk_menu","pk_ud_usuario",$fk_ud_usuario);
 $fila_ud=$ds_ud->fetch_assoc();
+        $fk_ud=$fila_ud['pk_ud'];
         $fk_carrera=$fila_ud['fk_carrera'];
         $carrera=$fila_ud['menu_nombre'];
         $fk_modulo=$fila_ud['fk_modulo'];
@@ -123,11 +125,14 @@ $ds_calo=$general->listarRegistros("capacidad_logro","pk_capacidad_logro","asc",
 $fila_calo=$ds_calo->fetch_assoc();
         $pk_capacidad_logro=$fila_calo['pk_capacidad_logro'];
         $calo_descripcion=$fila_calo['calo_descripcion'];
-        
+
 
 $fk_usuario=$pk_usuario_login;
-$fk_ud=$_POST['fk_ud'];
-$sesi_orden=0;
+//==orden
+$condicion_orden="fk_usuario='$fk_usuario' AND fk_ud_usuario='$fk_ud_usuario'";                
+$num_orden=$general->ultimoPK("sesion","sesi_orden",1,$condicion_orden);
+
+$sesi_orden=$num_orden+1;
 $sesi_docente=addslashes($usuario_nombre_login);
 $sesi_anio=date("Y");
 $sesi_periodo=$periodo;
@@ -170,6 +175,7 @@ $biblio_docente="";
 $biblio_estudiante="";
 			
 	$obj = new Sesion($fk_usuario,
+                        $fk_ud_usuario,
 						$fk_ud,
                         $sesi_orden,
 						$sesi_docente,
@@ -667,16 +673,16 @@ break; //FIN DE NEW
 <?php
 case "listar_eva_tec_instrumentos":
 ?>
-          <?php
-            $pk_eva_tecnica=$_POST['pk_eva_tecnica'];                                        
-            $fk_eva_tecnica_instrumento=$_POST['fk_eva_tecnica_instrumento'];      
-            $ds=$general->listarRegistros("eva_tecnica_instrumento","pk_eva_tecnica_instrumento","asc",1,"fk_eva_tecnica='$pk_eva_tecnica'");
-            while($fila=$ds->fetch_array(MYSQLI_ASSOC)){
-              $pk_eva_tecnica_instrumento=$fila['pk_eva_tecnica_instrumento'];
-                ?>
-                <option value="<?=$pk_eva_tecnica_instrumento?>" <?php if($pk_eva_tecnica_instrumento==$fk_eva_tecnica_instrumento){echo "selected='selected'";}?>><?=$fila['etin_descripcion']?></option>
-            <?php 
-            }
+    <?php
+      $pk_eva_tecnica=$_POST['pk_eva_tecnica'];                                        
+      $fk_eva_tecnica_instrumento=$_POST['fk_eva_tecnica_instrumento'];      
+      $ds=$general->listarRegistros("eva_tecnica_instrumento","pk_eva_tecnica_instrumento","asc",1,"fk_eva_tecnica='$pk_eva_tecnica'");
+      while($fila=$ds->fetch_array(MYSQLI_ASSOC)){
+        $pk_eva_tecnica_instrumento=$fila['pk_eva_tecnica_instrumento'];
+          ?>
+          <option value="<?=$pk_eva_tecnica_instrumento?>" <?php if($pk_eva_tecnica_instrumento==$fk_eva_tecnica_instrumento){echo "selected='selected'";}?>><?=$fila['etin_descripcion']?></option>
+      <?php 
+      }
 
     ?>
 <?php
@@ -767,6 +773,21 @@ $plap_indicador_competencia=addslashes($_POST['plap_indicador_competencia']);
 $plap_indicador_capacidad=addslashes($_POST['plap_indicador_capacidad']);
 $plap_logro_sesion=addslashes($_POST['plap_logro_sesion']);
 
+$inicio_estrategia=$_POST['inicio_estrategia'];
+$desarrollo_estrategia=$_POST['desarrollo_estrategia'];
+$cierre_estrategia=$_POST['cierre_estrategia'];
+$eva_indicador_logro=$_POST['eva_indicador_logro'];
+$fk_eva_tecnica=$_POST['fk_eva_tecnica'];
+$eva_tecnicas=$_POST['eva_tecnicas'];
+
+$fk_eva_tecnica_instrumento=$_POST['fk_eva_tecnica_instrumento'];
+$eva_instrumentos=$_POST['eva_instrumentos'];
+$eva_peso=$_POST['eva_peso'];
+$eva_momento=$_POST['eva_momento'];
+$biblio_docente=$_POST['biblio_docente'];
+$biblio_estudiante=$_POST['biblio_estudiante'];
+
+
 $campos="sesi_anio='$sesi_anio',
         sesi_horas='$sesi_horas',
         sesi_hora_sincrona='$sesi_hora_sincrona',
@@ -788,23 +809,62 @@ $campos="sesi_anio='$sesi_anio',
         sesi_fecha='$sesi_fecha',
         plap_indicador_competencia='$plap_indicador_competencia',
         plap_indicador_capacidad='$plap_indicador_capacidad',
-        plap_logro_sesion='$plap_logro_sesion'";
+        plap_logro_sesion='$plap_logro_sesion',
+        inicio_estrategia='$inicio_estrategia',
+        desarrollo_estrategia='$desarrollo_estrategia',
+        cierre_estrategia='$cierre_estrategia',
+        eva_indicador_logro='$eva_indicador_logro',
+        fk_eva_tecnica='$fk_eva_tecnica',
+        eva_tecnicas='$eva_tecnicas',
+        fk_eva_tecnica_instrumento='$fk_eva_tecnica_instrumento',
+        eva_instrumentos='$eva_instrumentos',
+        eva_peso='$eva_peso',
+        eva_momento='$eva_momento',
+        biblio_docente='$biblio_docente',
+        biblio_estudiante='$biblio_estudiante'";
 
 $general->modificarCampos("sesion",$campos,1,"pk_sesion='$pk'");
 ?>
 <?php
 break; /*FIN DE UPDATE*/
 ?>
+
+<?php
+case "duplicar_sesion":
+?>
+<?php
+	 
+	$pk=$_POST['pk'];		
+	$general->duplicarRegistro("sesion","pk_sesion",$pk);
+    
+    //sesion actividad
+	$ultimo_pk_sesion=$general->ultimoPK("sesion","pk_sesion");
+	$reemplazar=array("fk_sesion"=>$ultimo_pk_sesion);
+	
+    $condicion="fk_sesion='$pk'";
+    $general->duplicarRegistro("sesion_actividad","pk",0,1,$condicion,"1",$reemplazar);		
+?>
+<?php
+break; /* END DELETE*/
+?>
+
+
 <?php
 case "delete":
 ?>
 <?php
 	$pk=$_POST['pk'];		
-	$general->eliminarRegistro($tb,$tb_pk,$pk);		
+	$general->eliminarRegistro($tb,$tb_pk,$pk);	
+    
+    $general->eliminarRegistro("sesion_actividad","fk_sesion",$pk);	
+    
 ?>
 <?php
 break; /* END DELETE*/
 ?>
+
+
+
 <?php
 } /*FIN SWITCH*/
 ?>
