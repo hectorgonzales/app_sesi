@@ -18,29 +18,35 @@ switch($op){
 <?php
 case "list":
 ?>
- 
+             <?php
+              $fk_ud_usuario=$_POST['fk_ud_usuario'];
+              $condicion="fk_ud_usuario='$fk_ud_usuario'";        
+              $ds=$general->listarRegistros($tb,"sesi_orden","asc",1,$condicion);
+              $tr=$ds->num_rows;
+                if ($tr==0){
+                    echo "<div class=\"uk-alert uk-alert-warning uk-margin-top uk-width-1-1 \"> No se encontraron registros. </div>";
+                }else{
+              ?>
     
-    		 <ul uk-grid id="ul_sesiones" class="uk-sortable uk-grid-small uk-grid-match uk-child-width-1-3@s" data-uk-sortable>
+    		 <ul uk-grid id="ul_sesiones" class="uk-sortable uk-grid-small uk-grid-match uk-child-width-1-2@s uk-child-width-1-3@l" data-uk-sortable>
             
                         <?php
-                        $fk_ud_usuario=$_POST['fk_ud_usuario'];
-                        $condicion="fk_ud_usuario='$fk_ud_usuario'";        
-			            $ds=$general->listarRegistros($tb,"sesi_orden","desc",1,$condicion);
-
                         while($fila=$ds->fetch_array(MYSQLI_ASSOC)){
                         $pk_sesion=$fila['pk_sesion'];
+                        $bg_sesi=($fila['sesi_estado']=="1")?"bg-sesi":"";
+                        $bg_badge=($fila['sesi_estado']=="1")?"uk-label-success":"bg-bag";
                         ?>
                          <li id="<?=$pk_sesion;?>" class="uk-margin-small-bottom">
-                         	      <div class="uk-card uk-card-default uk-card-body uk-card-hover uk-padding-small" >
+                         	      <div class="uk-card uk-card-default <?=$bg_sesi?> uk-card-body uk-card-hover uk-padding-small" >
                                       <div class="uk-card-body uk-padding-small">
                                           <span><?=$fila['sesi_tema']?></span>
                                       </div>
                                       <div class="uk-card-footer uk-padding-remove-horizontal uk-padding-remove-bottom">
-                                            <a href="#" onClick="info_general('<?=$pk_sesion?>');" class="uk-icon-link" uk-icon="file-edit"></a>
-                                            <a href="#" onClick="duplicar_sesion('<?=$pk_sesion?>');" class="uk-icon-link" uk-icon="copy"></a>
-                                            <a href="#" onClick="ver_sesion_pdf('<?=$pk_sesion?>');" class="uk-icon-link uk-margin-small-right" uk-icon="file-pdf"></a>
-                                            <a href="#" onClick="form_eliminar_sesi('<?=$pk_sesion?>');" class="uk-icon-link" uk-icon="trash"></a>
-                                            <span class="uk-badge uk-float-right">Actividad N° <?=$fila['sesi_orden'];?></span>
+                                            <a href="#" onClick="modificar_sesion('<?=$pk_sesion?>');" class="uk-icon-link" uk-icon="file-edit" uk-tooltip="Modificar"></a>
+                                            <a href="#" onClick="duplicar_sesion('<?=$pk_sesion?>');" class="uk-icon-link" uk-icon="copy" uk-tooltip="Duplicar"></a>
+                                            <a href="#" onClick="ver_sesion_pdf('<?=$pk_sesion?>','1');" class="uk-icon-link uk-margin-small-right" uk-icon="file-pdf" uk-tooltip="Ver PDF"></a>
+                                            <a href="#" onClick="form_eliminar_sesi('<?=$pk_sesion?>');" class="uk-icon-link" uk-icon="trash" uk-tooltip="Eliminar"></a>
+                                            <span class="uk-badge <?=$bg_badge?> uk-float-right fs10">Actividad N° <?=$fila['sesi_orden'];?></span>
                                       </div>
                                   </div>
                          </li>
@@ -56,7 +62,21 @@ case "list":
 		   });
         </script>
                        
+        <?php
+        } //endif
+        ?>
 
+<script>
+    var tr=<?=$tr?>;
+    if(tr>0){
+        desactivar_control("#bt_ver_all_pdf",false);
+        desactivar_control("#bt_order",false);
+    }else{
+        desactivar_control("#bt_ver_all_pdf",true);
+        desactivar_control("#bt_order",true);
+    }
+</script>
+        
 <?php
 break; /*FIN DE LIST*/
 ?>
@@ -173,6 +193,7 @@ $eva_peso="100%";
 $eva_momento="Cierre";
 $biblio_docente="";
 $biblio_estudiante="";
+$sesi_estado=0;
 			
 	$obj = new Sesion($fk_usuario,
                         $fk_ud_usuario,
@@ -217,7 +238,8 @@ $biblio_estudiante="";
 						$eva_peso,
 						$eva_momento,
 						$biblio_docente,
-						$biblio_estudiante);
+						$biblio_estudiante,
+                        $sesi_estado);
   	$obj->insertar();
 ?>
 <?php
@@ -227,15 +249,18 @@ break; //FIN DE INSERT
 
 <?php
 /*NEW*/
-case "info_general":
+case "modificar_sesion":
 ?>
 <?php
 $pk=$_POST['pk'];
+$fk_ud_usuario=$_POST['fk_ud_usuario'];
+
 $ds=$general->modificarRegistro($tb,$tb_pk,$pk);
 $fila=$ds->fetch_assoc();
 
 $fk_ud=$fila['fk_ud'];
 $fk_modulo=$fila['fk_modulo'];
+$sesi_ud=mb_strtoupper($fila['sesi_ud']);
 ?>
 <div uk-grid>
   
@@ -243,7 +268,7 @@ $fk_modulo=$fila['fk_modulo'];
             <div class="uk-card uk-card-default">
                   <div class="uk-card-header bg-card-header-1 uk-padding-small">
                   	<div class="uk-badge bg-gray p210 uk-text-middle">
-                  		<span>INFORMACIÓN GENERAL</span>
+                  		<span>FICHA DE SESION DE <?=$sesi_ud;?></span>
                     </div>
                   </div>
 
@@ -254,19 +279,19 @@ $fk_modulo=$fila['fk_modulo'];
                          <!--form-->
                             <!--grid-->
                              <form class="uk-grid-small uk-form uk-grid-match" uk-grid>
-                             	<div class="uk-width-2-3@s">
+                             	<div class="uk-width-2-3@l">
                                 	<div class="uk-card uk-card-default uk-card-body">
                                         <div class="uk-grid-small" uk-grid>
                                                 
                                         		<!--CAMPOS-->                                            
-                                                <div class="uk-width-1-1">
+                                                <div class="uk-width-1-1@s">
                                                     <h4 class="uk-text-muted uk-background-muted">INFORMACIÓN GENERAL</h4>
                                                 </div>                                                
-                                                <div class="uk-width-1-4">
+                                                <div class="uk-width-1-2 uk-width-1-4@s">
                                                     <label>Fecha de desarrollo:</label>
                                                     <input type="date" class="uk-input uk-form-small" id="txt_sesi_fecha" value="<?=$fila['sesi_fecha']?>" />
                                                 </div>                                                
-                                                <div class="uk-width-1-4">
+                                                <div class="uk-width-1-2 uk-width-1-4@s">
                                                     <label>Total de Horas Actividad:</label>
                                                     <select class="uk-select uk-form-small" id="txt_sesi_horas" >
                                                         <?php
@@ -278,11 +303,11 @@ $fk_modulo=$fila['fk_modulo'];
                                                         ?>
                                                     </select>
                                                 </div>
-                                                <div class="uk-width-1-4">
+                                                <div class="uk-width-1-2 uk-width-1-4@s">
                                                     <label>Hora sincrona (Min.):</label>
                                                     <input type="text" class="uk-input uk-form-small mayus" id="txt_sesi_hora_sincrona" disabled value="<?=$fila['sesi_hora_sincrona']?>" />
                                                 </div>
-                                                <div class="uk-width-1-4">
+                                                <div class="uk-width-1-2 uk-width-1-4@s">
                                                     <label>Hora asincrona (Min.):</label>
                                                     <select class="uk-select uk-form-small mayus" id="txt_sesi_hora_asincrona" >
                                                         <?php
@@ -445,14 +470,14 @@ $fk_modulo=$fila['fk_modulo'];
                                                     <div class="uk-width-1-1">
                                                         <div uk-grid class="uk-grid-small">
                                                             <div class="uk-width-4-5">
-                                                                <label><span class="uk-label">MOMENTO DE INICIO</span> - Estrategia:</label>
+                                                                <label><span class="uk-label uk-label-success">MOMENTO DE INICIO</span> - Estrategia:</label>
                                                                 <input type="text" class="uk-input uk-form-small mayus" id="txt_inicio_estrategia" value="<?=$fila['inicio_estrategia']?>" />
                                                             </div>
 
                                                             <div class="uk-width-1-5 tc">
                                                                 <br>
-                                                                <label class="uk-margin-right">Agregar Actividades:</label>
-                                                                <a href="#" onClick="form_nuevo_seac('<?=$pk?>','inicio');" class="uk-icon-link" uk-icon="plus-circle"></a>
+                                                                <label class="uk-margin-right uk-visible@s">Agregar Actividades:</label>
+                                                                <a href="#" onClick="form_nuevo_seac('<?=$pk?>','inicio');" class="uk-icon-link" uk-icon="plus-circle" uk-tooltip="title: Agregar; pos: bottom"></a>
                                                             </div>
 
                                                             <div id="ct_list_seac_inicio" class="uk-width-1-1">
@@ -466,14 +491,14 @@ $fk_modulo=$fila['fk_modulo'];
                                                     <div class="uk-width-1-1 uk-margin-medium-top">
                                                         <div uk-grid class="uk-grid-small">
                                                             <div class="uk-width-4-5">
-                                                                <label><span class="uk-label">MOMENTO DE DESARROLLO</span> - Estrategia:</label>
+                                                                <label><span class="uk-label uk-label-warning">MOMENTO DE DESARROLLO</span> - Estrategia:</label>
                                                                 <input type="text" class="uk-input uk-form-small mayus" id="txt_desarrollo_estrategia" value="<?=$fila['desarrollo_estrategia']?>" />
                                                             </div>
 
                                                             <div class="uk-width-1-5 tc">
                                                                 <br>
-                                                                <label class="uk-margin-right">Agregar Actividades:</label>
-                                                                <a href="#" onClick="form_nuevo_seac('<?=$pk?>','desarrollo');" class="uk-icon-link" uk-icon="plus-circle"></a>
+                                                                <label class="uk-margin-right uk-visible@s">Agregar Actividades:</label>
+                                                                <a href="#" onClick="form_nuevo_seac('<?=$pk?>','desarrollo');" class="uk-icon-link" uk-icon="plus-circle" uk-tooltip="title: Agregar; pos: bottom"></a>
                                                             </div>
 
                                                             <div id="ct_list_seac_desarrollo" class="uk-width-1-1">
@@ -487,14 +512,14 @@ $fk_modulo=$fila['fk_modulo'];
                                                     <div class="uk-width-1-1 uk-margin-medium-top">
                                                         <div uk-grid class="uk-grid-small">
                                                             <div class="uk-width-4-5">
-                                                                <label><span class="uk-label">MOMENTO DE CIERRE</span> - Estrategia:</label>
+                                                                <label><span class="uk-label uk-label-danger">MOMENTO DE CIERRE</span> - Estrategia:</label>
                                                                 <input type="text" class="uk-input uk-form-small mayus" id="txt_cierre_estrategia" value="<?=$fila['cierre_estrategia']?>" />
                                                             </div>
 
                                                             <div class="uk-width-1-5 tc">
                                                                 <br>
-                                                                <label class="uk-margin-right">Agregar Actividades:</label>
-                                                                <a href="#" onClick="form_nuevo_seac('<?=$pk?>','cierre');" class="uk-icon-link" uk-icon="plus-circle"></a>
+                                                                <label class="uk-margin-right uk-visible@s">Agregar Actividades:</label>
+                                                                <a href="#" onClick="form_nuevo_seac('<?=$pk?>','cierre');" class="uk-icon-link" uk-icon="plus-circle" uk-tooltip="title: Agregar; pos: bottom"></a>
                                                             </div>
 
                                                             <div id="ct_list_seac_cierre" class="uk-width-1-1">
@@ -515,7 +540,7 @@ $fk_modulo=$fila['fk_modulo'];
                                                         <label>Indicadores de logro de la sesión:</label>
                                                         <textarea rows="2" class="uk-textarea uk-form-small" id="txt_eva_indicador_logro"><?=$fila['eva_indicador_logro']?></textarea>
                                                     </div>
-                                                    <div class="uk-width-2-5">
+                                                    <div class="uk-width-2-5@s">
                                                         <label>Técnicas:</label>
                                                         <select class="uk-select uk-form-small" id="txt_eva_tecnicas">
                                                         <?php
@@ -532,14 +557,14 @@ $fk_modulo=$fila['fk_modulo'];
                                                         </select>    
                                                     </div>
                                                     
-                                                    <div class="uk-width-1-5">
+                                                    <div class="uk-width-1-5@s">
                                                         <label>Instrumentos:</label>
                                                         <select class="uk-select uk-form-small" id="txt_eva_instrumentos">
                                                             <!--intrumentos-->
                                                         </select>    
                                                         
                                                     </div>
-                                                    <div class="uk-width-1-5">
+                                                    <div class="uk-width-1-2 uk-width-1-5@s">
                                                         <label>Peso o Porcentaje:</label>
                                                         <select id="txt_eva_peso" class="uk-select uk-form-small">
                                                             <?php 
@@ -552,7 +577,7 @@ $fk_modulo=$fila['fk_modulo'];
                                                             ?>
                                                         </select>
                                                     </div>
-                                                    <div class="uk-width-1-5">
+                                                    <div class="uk-width-1-2 uk-width-1-5@s">
                                                         <label>Momento:</label>
                                                         <select class="uk-select uk-form-small" id="txt_eva_momento">
                                                         <?php
@@ -590,8 +615,8 @@ $fk_modulo=$fila['fk_modulo'];
                    </div><!--card body-->
                   <!--footer-->
                   <div class="uk-card-footer uk-padding-small">
-                        <button type="button" onClick="hacer_clic('#frm_bt_lista_<?=$prefijo_op;?>');" class="uk-button uk-button-default uk-button-small"><i uk-icon="reply"></i> &nbsp; <span class="uk-visible@s">Cancelar</span></button>        
-                        <button type="button" value="Submit" onClick="validaForm_<?=$prefijo_op;?>(1);" class="uk-button uk-button-primary uk-button-small"><i uk-icon="check"></i> &nbsp; Guardar</button>
+                        <button type="button" onClick="main_udus('<?=$fk_ud_usuario?>')" class="uk-button uk-button-default uk-button-small"><i uk-icon="reply"></i> &nbsp; <span class="uk-visible@s">Cerrar</span></button>        
+                        <button type="button" value="Submit" onClick="validaForm_<?=$prefijo_op;?>(1);" class="uk-button uk-button-primary uk-button-small"><i uk-icon="check"></i> &nbsp; Guardar Cambios</button>
                         <span uk-alert class="uk-alert-danger uk-margin-remove uk-padding-remove fs10" style="display:none" id="frm_msg_error"></span>  
                   </div> 
                   <!--footer--> 
@@ -699,6 +724,9 @@ foreach($a_orden as $sesion){
 	$orden=$sesion->orden;	
 	$general->modificarCampos("sesion","sesi_orden='$orden'",1,"pk_sesion='$pk'");
 } 
+?>
+<?php
+break; //FIN DE NEW
 ?>
 
 <?php
@@ -821,7 +849,8 @@ $campos="sesi_anio='$sesi_anio',
         eva_peso='$eva_peso',
         eva_momento='$eva_momento',
         biblio_docente='$biblio_docente',
-        biblio_estudiante='$biblio_estudiante'";
+        biblio_estudiante='$biblio_estudiante',
+        sesi_estado='1'";
 
 $general->modificarCampos("sesion",$campos,1,"pk_sesion='$pk'");
 ?>
@@ -833,16 +862,17 @@ break; /*FIN DE UPDATE*/
 case "duplicar_sesion":
 ?>
 <?php
-	 
+    
 	$pk=$_POST['pk'];		
-	$general->duplicarRegistro("sesion","pk_sesion",$pk);
+	$reemplazar1=array("sesi_estado"=>"0");
+    $general->duplicarRegistro("sesion","pk_sesion",$pk,0,"",1,$reemplazar1);
     
     //sesion actividad
 	$ultimo_pk_sesion=$general->ultimoPK("sesion","pk_sesion");
 	$reemplazar=array("fk_sesion"=>$ultimo_pk_sesion);
 	
     $condicion="fk_sesion='$pk'";
-    $general->duplicarRegistro("sesion_actividad","pk",0,1,$condicion,"1",$reemplazar);		
+    $general->duplicarRegistro("sesion_actividad","pk","0",1,$condicion,"1",$reemplazar);		
 ?>
 <?php
 break; /* END DELETE*/

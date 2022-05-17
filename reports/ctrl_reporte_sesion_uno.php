@@ -10,11 +10,11 @@ $general=new General();
 date_default_timezone_set('America/Lima');
 //--------------------------------------------------------------------	
 class MYPDF extends TCPDF {
-	/*public function Footer() {
+	public function Footer() {
 		$this->SetY(-15);
 		$this->SetFont('Helvetica', '', 8);
 		$this->Cell(0, 10, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
-	}*/
+	}
 }
 //=========================================================
 $pdf = new MYPDF('P', 'mm', 'A4', true, 'UTF-8', false);
@@ -28,7 +28,6 @@ $pdf = new MYPDF('P', 'mm', 'A4', true, 'UTF-8', false);
 	$pdf->SetHeaderMargin(10);
 	$pdf->setListIndentWidth(4);
     $pdf->setPrintHeader(false);
-    $pdf->setPrintFooter(false);
 	$pdf->addPage();
 	$codigoHTML = '';
 
@@ -50,33 +49,13 @@ $style = array(
 		);
         
 //========================================================
-$codigoHTML='
-<html>
-<head>
-<title></title>';
-$codigoHTML.='<style>'.file_get_contents('../resources/css/reportes.css').'</style>';
-$codigoHTML.='</head>
-<body>';
-
 //--------------------------------------------------------------------
-$pk=$_GET['pk_sesion'];
+$pk_sesion=$_GET['pk_sesion'];
 $v=$_GET['v'];
-    if($v=='1'){
-		$ds=$general->listarRegistros("sesion","pk_sesion","asc",1,"pk_sesion='$pk'");
-	}elseif($v=='2'){
-		$ds=$general->listarRegistros("sesion","sesi_orden","asc",1,"fk_ud_usuario='$pk'");
-	}
-    $trx=$ds->num_rows;
-    
-    $n=1;
-    while($fila=$ds->fetch_array(MYSQLI_ASSOC)){
-    $pages_break='';
-    if($trx>1 && $n<$trx){
-        $pages_break='<i pagebreak="true"></i>';
-    }
-	$n++;
-    
-    $pk_sesion=$fila['pk_sesion'];
+
+	$ds=$general->modificarRegistro("sesion","pk_sesion",$pk_sesion);	
+	$fila=$ds->fetch_assoc();
+	
     $fk_usuario=$fila['fk_usuario'];
     $fk_ud_usuario=$fila['fk_ud_usuario'];
     $fk_ud=$fila['fk_ud'];
@@ -143,7 +122,15 @@ $v=$_GET['v'];
 //--------------------------------------------------------------------    
 ?>
 <?php
+$codigoHTML='
+<html>
+<head>
+<title></title>';
+//8X3
+$codigoHTML.='<style>'.file_get_contents('../resources/css/reportes.css').'</style>';
 
+$codigoHTML.='</head>
+<body>';
 //========================
 
 $codigoHTML.='
@@ -166,7 +153,7 @@ $codigoHTML.='</td>
 $codigoHTML.='
 <table width="100%" border="0" cellpadding="3" cellspacing="0" class="tabla">
 <tr>
-    <td colspan="7" class="bg1"><span class="t1"><b>SESION SINCRONICA<br>ACTIVIDAD DE APRENDIZAJE N° '.str_pad($sesi_orden, 2, "0", STR_PAD_LEFT).'</b></span></td>
+    <td colspan="7" class="bg1"><span class="t1"><b>SESION SINCRONICA<br>ACTIVIDAD DE APRENDIZAJE N° 01</b></span></td>
 </tr>
 <tr>
     <th colspan="7">I.INFORMACIÓN GENERAL</th>
@@ -256,8 +243,8 @@ $codigoHTML.='
 
 
 $condicion="fk_sesion='$pk_sesion' AND seac_momento='inicio'";
-$ds2=$general->listarRegistros("sesion_actividad","pk_sesion_actividad","asc",1,$condicion);
-$tr=$ds2->num_rows+1;
+$ds=$general->listarRegistros("sesion_actividad","pk_sesion_actividad","asc",1,$condicion);
+$tr=$ds->num_rows+1;
 
 $codigoHTML.='
 <table width="100%" border="0" cellpadding="3" cellspacing="0" class="tabla">
@@ -277,10 +264,10 @@ $codigoHTML.='
 </tr>';
 
 //=================================================	
-	while($fila2=$ds2->fetch_array(MYSQLI_ASSOC)){  
-		$actividad=$fila2['seac_actividad'];
-		$icono=$fila2['seac_recurso_icono'];
-        $tiempo=$fila2['seac_tiempo'];
+	while($fila=$ds->fetch_array(MYSQLI_ASSOC)){  
+		$actividad=$fila['seac_actividad'];
+		$icono=$fila['seac_recurso_icono'];
+        $tiempo=$fila['seac_tiempo'];
 		//=========================		
 	$codigoHTML.='	
     <tr>
@@ -293,21 +280,21 @@ $codigoHTML.='
     
 
 $condicion_desarrollo="fk_sesion='$pk_sesion' AND seac_momento='desarrollo'";
-$ds3=$general->listarRegistros("sesion_actividad","pk_sesion_actividad","asc",1,$condicion_desarrollo);
-$tr3=$ds3->num_rows+1;
+$ds2=$general->listarRegistros("sesion_actividad","pk_sesion_actividad","asc",1,$condicion_desarrollo);
+$tr2=$ds2->num_rows+1;
 
 $codigoHTML.='
 <tr>
-    <td rowspan="'.$tr3.'"><span class="b">Desarrollo</span></td>
+    <td rowspan="'.$tr2.'"><span class="b">Desarrollo</span></td>
     <td colspan="3" class="bg2"><span class="bb">Estrategias:</span> <span class="b">'.$desarrollo_estrategia.'</span></td>
 
 </tr>';
 
 //=================================================	
-	while($fila3=$ds3->fetch_array(MYSQLI_ASSOC)){  
-		$actividad2=$fila3['seac_actividad'];
-		$icono2=$fila3['seac_recurso_icono'];
-        $tiempo2=$fila3['seac_tiempo'];
+	while($fila2=$ds2->fetch_array(MYSQLI_ASSOC)){  
+		$actividad2=$fila2['seac_actividad'];
+		$icono2=$fila2['seac_recurso_icono'];
+        $tiempo2=$fila2['seac_tiempo'];
 		//=========================		
 	$codigoHTML.='	
     <tr>
@@ -320,20 +307,20 @@ $codigoHTML.='
 
 
 $condicion_cierre="fk_sesion='$pk_sesion' AND seac_momento='cierre'";
-$ds4=$general->listarRegistros("sesion_actividad","pk_sesion_actividad","asc",1,$condicion_cierre);
-$tr4=$ds4->num_rows+1;
+$ds3=$general->listarRegistros("sesion_actividad","pk_sesion_actividad","asc",1,$condicion_cierre);
+$tr3=$ds3->num_rows+1;
 $codigoHTML.='
 <tr>
-    <td rowspan="'.$tr4.'"><span class="b">Desarrollo</span></td>
+    <td rowspan="'.$tr3.'"><span class="b">Desarrollo</span></td>
     <td colspan="3" class="bg2"><span class="bb">Estrategias:</span> <span class="b">'.$cierre_estrategia.'</span></td>
 
 </tr>';
 
 //=================================================	
-	while($fila4=$ds4->fetch_array(MYSQLI_ASSOC)){  
-		$actividad3=$fila4['seac_actividad'];
-		$icono3=$fila4['seac_recurso_icono'];
-        $tiempo3=$fila4['seac_tiempo'];
+	while($fila3=$ds3->fetch_array(MYSQLI_ASSOC)){  
+		$actividad3=$fila3['seac_actividad'];
+		$icono3=$fila3['seac_recurso_icono'];
+        $tiempo3=$fila3['seac_tiempo'];
 		//=========================		
 	$codigoHTML.='	
     <tr>
@@ -398,8 +385,9 @@ $codigoHTML.='
 <td></td>
 <td class="tc">'.$sesi_docente.'</td>
 </tr>
-</table>'.$pages_break;
-} //end while
+</table>
+';
+
 
 
 $codigoHTML.='

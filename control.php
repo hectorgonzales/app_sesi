@@ -10,10 +10,10 @@ date_default_timezone_set('America/Lima');
 <!DOCTYPE HTML>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="icon" href="favicon.ico" type="image/ico">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SESI</title>        
+    <title>SESI v.01</title>        
     <link rel="stylesheet" href="resources/css/uikit.min.css" />
      <link rel="stylesheet" href="resources/css/estilo.css" />
 

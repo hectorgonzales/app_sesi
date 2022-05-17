@@ -219,6 +219,9 @@ iconos
 
 .bg-gray{background:#bbb; color:#FFF}
 .bg-title{background:#A2C4DF; margin-top:3px}
+.bg-sesi{background:#E9FFEA; color:#020202} /*FDFCF4*/
+.bg-sesi:hover{ background:#E9FFEA !important}
+.bg-bag{background:#AAAAAA; color: #ddd}
 /* card
 ===========================================================================*/
 .bg-card-header-1{ background:#e9f0f3 !important} /*e9f0f3*/

@@ -45,6 +45,7 @@ private $eva_peso;
 private $eva_momento;
 private $biblio_docente;
 private $biblio_estudiante;
+private $sesi_estado;
 //-----------------------------
 private $tb="sesion";
 private $tb_pk="pk_sesion";
@@ -91,7 +92,8 @@ public function __construct($fk_usuario="",
 						$eva_peso="",
 						$eva_momento="",
 						$biblio_docente="",
-						$biblio_estudiante=""){
+						$biblio_estudiante="",
+						$sesi_estado=""){
 							$this->fk_usuario=$fk_usuario;
 							$this->fk_ud_usuario=$fk_ud_usuario;
 							$this->fk_ud=$fk_ud;
@@ -136,6 +138,7 @@ public function __construct($fk_usuario="",
 							$this->eva_momento=$eva_momento;
 							$this->biblio_docente=$biblio_docente;
 							$this->biblio_estudiante=$biblio_estudiante;
+							$this->sesi_estado=$sesi_estado;
 							}
 //-------------GETTER AND SETTER----------------
 public function __get($attr){
@@ -201,7 +204,8 @@ public function insertar(){
 						eva_peso,
 						eva_momento,
 						biblio_docente,
-						biblio_estudiante
+						biblio_estudiante,
+						sesi_estado
 						) values(
 						'$this->fk_usuario',
 						'$this->fk_ud_usuario',
@@ -246,7 +250,8 @@ public function insertar(){
 						'$this->eva_peso',
 						'$this->eva_momento',
 						'$this->biblio_docente',
-						'$this->biblio_estudiante')";
+						'$this->biblio_estudiante',
+						'$this->sesi_estado')";
   $con->query($sql);
   $return_query=$con->affected_rows;
   $con->close();
@@ -298,7 +303,8 @@ public function actualizar($pk){
 						eva_peso='$this->eva_peso',
 						eva_momento='$this->eva_momento',
 						biblio_docente='$this->biblio_docente',
-						biblio_estudiante='$this->biblio_estudiante'
+						biblio_estudiante='$this->biblio_estudiante',
+						sesi_estado='$this->sesi_estado'
 						 WHERE ".$this->tb_pk."='$pk'";
   $con->query($sql);
   $return_query=$con->affected_rows;

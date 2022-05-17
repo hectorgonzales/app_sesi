@@ -42,17 +42,4 @@
 
 
 .bg1{background-color:#eee}
-
-.rotate {
-/* Safari */
--webkit-transform: rotate(-90deg);
-/* Firefox */
--moz-transform: rotate(-90deg);
-/* IE */
--ms-transform: rotate(-90deg);
-/* Opera */
--o-transform: rotate(-90deg);
-float: left;
-}
-
-ol li {list-style-type:decimal;color:green;}
+.bg2{background-color:#EEF5F8}

@@ -18,7 +18,7 @@ case "main":
 ?>
 <div uk-grid class="uk-grid-small">
   
-      <div class="uk-width-2-5">
+      <div class="uk-width-2-5@s">
             <div class="uk-card uk-card-default">
                   <div class="uk-card-header bg-card-header-1 uk-padding-small">
                    	<!--btns-->
@@ -30,7 +30,7 @@ case "main":
                         </div>
                          <div class="uk-width-1-2@s uk-padding-remove">
                             <div class="uk-float-right">
-                                <a href="#" onClick="form_nuevo_udus();" class="uk-icon-link" uk-icon="plus-circle"></a>
+                                <a href="#" onClick="form_nuevo_udus();" class="uk-icon-link" uk-icon="plus-circle" uk-tooltip="Agregar"></a>
                             </div>
                         </div>
                     </div>
@@ -43,14 +43,13 @@ case "main":
                   
                   <div class="uk-card-footer uk-padding-small">
                         <span class="uk-badge bg-gray p210 uk-text-middle">Total Registros   <i uk-icon="icon: fa-solid-chevron-right; ratio: 0.6"></i>   <span id="lb_total_registros">0</span></span>
-                        <button type="button" onClick="" class="uk-button uk-button-primary uk-button-small uk-align-right"><i uk-icon="print"></i>   <span class="uk-visible@s">Imprimir</span></button>  
                   </div>
               
             </div>
       </div>
 
 
-      <div class="uk-width-3-5">
+      <div class="uk-width-3-5@s">
             <div class="uk-card uk-card-default">
                   <div class="uk-card-header bg-card-header-1 uk-padding-small">
                    	<!--btns-->
@@ -64,7 +63,7 @@ case "main":
                         <div class="uk-width-1-2@s uk-padding-remove">
                             <input type="hidden" id="txt_fk_ud_usuario">
                             <div class="uk-float-right">
-                                <a href="#" onClick="form_insertar_sesi();" class="uk-icon-link" uk-icon="plus-circle"></a>
+                                <a href="#" onClick="form_insertar_sesi();" class="uk-icon-link" uk-icon="plus-circle" uk-tooltip="Agregar"></a>
                             </div>
                         </div>
                     </div>
@@ -76,8 +75,8 @@ case "main":
                   </div>
                   
                   <div class="uk-card-footer uk-padding-small">
-                        <span class="uk-badge bg-gray p210 uk-text-middle">Total Registros   <i uk-icon="icon: fa-solid-chevron-right; ratio: 0.6"></i>   <span id="lb_total_registros">0</span></span>
-                        <button type="button" onClick="" class="uk-button uk-button-primary uk-button-small uk-align-right"><i uk-icon="print"></i>   <span class="uk-visible@s">Imprimir</span></button>  
+                        <button type="button" id="bt_ver_all_pdf" onClick="ver_sesion_pdf('0','2');" class="uk-button uk-button-primary uk-button-small" disabled><i uk-icon="file-pdf"></i>   <span class="uk-visible@s">Ver todas las fichas</span></button> 
+                        <button type="button" id="bt_order" onClick="actualizar_ordenar_sesi();" class="uk-button uk-button-primary uk-button-small uk-float-right" disabled><i uk-icon="thumbnails"></i>   <span class="uk-visible@s">Ordenar</span></button>  
                   </div>
               
             </div>

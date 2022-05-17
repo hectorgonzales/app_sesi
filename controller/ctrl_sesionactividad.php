@@ -20,11 +20,11 @@ $momento=$_POST['momento'];
      <thead>
             <tr>
             <th>N°</th>
-				<th data-campo="seac_actividad" class="uk-visible@s">ACTIVIDADES DE <?=strtoupper($momento)?></th>
+				<th data-campo="seac_actividad" class="">ACTIVIDADES DE <?=strtoupper($momento)?></th>
 				<th width="80" data-campo="seac_recurso" class="uk-visible@s">RECURSO</th>
 				<th width="80" data-campo="seac_tiempo" class="uk-visible@s">TIEMPO</th>
-                <th width="30" data-campo="" class="uk-visible@s">M</th>
-                <th width="30" data-campo="" class="uk-visible@s">E</th>
+                <th width="30" data-campo="" class="">M</th>
+                <th width="30" data-campo="" class="">E</th>
 	        </tr>
         </thead>
     <!--Table body-->        
@@ -45,11 +45,11 @@ $momento=$_POST['momento'];
 				?>
 				<tr id="fila<?=$fila[$tb_pk];?>">
 					<td class="tc bgn" width="30"><?=$n;?></td>
-					<td class="uk-visible@s"><?=$actividad;?></td>
+					<td class=""><?=$actividad;?></td>
 					<td class="uk-visible@s"><?=$fila['seac_recurso']?></td>
 					<td class="uk-visible@s tc"><?=$fila['seac_tiempo']." min."?></td>								
-                    <td class="uk-visible@s tc"><a href="#" onClick="form_modificar_seac('<?=$pk_sesion_actividad?>');" class="uk-icon-link" uk-icon="file-edit"></a></td>
-                    <td class="uk-visible@s tc"><a href="#" onClick="form_eliminar_seac('<?=$pk_sesion_actividad?>');" class="uk-icon-link" uk-icon="trash"></a></td>
+                    <td class="tc"><a href="#" onClick="form_modificar_seac('<?=$pk_sesion_actividad?>');" class="uk-icon-link" uk-icon="file-edit"></a></td>
+                    <td class="tc"><a href="#" onClick="form_eliminar_seac('<?=$pk_sesion_actividad?>');" class="uk-icon-link" uk-icon="trash"></a></td>
 				</tr>               
 				<?php
 				$n++;
@@ -119,7 +119,7 @@ $fila=$ds->fetch_assoc();
                             <textarea rows="4" class="uk-textarea uk-form-small" id="txt_seac_actividad"><?=$fila['seac_actividad'];?></textarea>
                          </div>
                          
-                        <div class="uk-width-1-2">
+                        <div class="uk-width-1-2@s">
 							<label>Recurso:</label>
                             <select class="uk-select uk-form-small" id="txt_seac_recurso">
                                 <?php
@@ -133,7 +133,7 @@ $fila=$ds->fetch_assoc();
 							</select>
                         </div>
                         						
-						<div class="uk-width-1-2">
+						<div class="uk-width-1-2@s">
 							<label>Tiempo:</label>
 							<input type="number" class="uk-input uk-form-small enteros" id="txt_seac_tiempo" value="<?=$fila['seac_tiempo'];?>" />
 						</div>

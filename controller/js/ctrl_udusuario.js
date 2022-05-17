@@ -1,6 +1,6 @@
 
 //-------------------------------------------------------------------------------------------------------	
-function main_udus(){
+function main_udus(fk_ud_usuario){
  var parametros = {'op':'main'}
   $.ajax({
 	  data:  parametros,
@@ -12,12 +12,13 @@ function main_udus(){
 	  },
 	  success: function(response){
 		$("#ct_form").html(response);
-		listar_udus();  
+		listar_udus(fk_ud_usuario);
+
 	  }
   });
 }
 //--------------------------------------------------------------------------------------------------------
-function listar_udus(){
+function listar_udus(fk_ud_usuario='0'){
   	var parametros = {'op':'list'}
   	$.ajax({
 		  data:  parametros,
@@ -30,6 +31,7 @@ function listar_udus(){
 		  success:  function (response) {
 				  $("#ct_form_body").html(response);
                   tb_seleccionar_fila_lista('#tb_lista',1);
+                  hacer_clic('#fila' + fk_ud_usuario);
 		  }
   	});
 }

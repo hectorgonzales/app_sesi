@@ -13,6 +13,7 @@ function listar_sesi(){
 		  },
 		  success:  function (response) {
 				  $("#ct_form_body_sesi").html(response);
+                     
 		  }
   	});
 }
@@ -41,8 +42,9 @@ function form_insertar_sesi(){
 }
 
 //--------------------------------------------------------------------------------------------------------
-function info_general(pk){
-  	var parametros = {'op':'info_general','pk':pk}
+function modificar_sesion(pk){
+    var fk_ud_usuario=$('#txt_fk_ud_usuario').val();
+  	var parametros = {'op':'modificar_sesion','pk':pk,'fk_ud_usuario':fk_ud_usuario}
   	$.ajax({
 		  data:  parametros,
 		  cache: false,
@@ -53,10 +55,13 @@ function info_general(pk){
 		  },
 		  success:  function (response) {
 				  $("#ct_form").html(response);
+                  //ct_form
 				  //$("#campo").focus();				  
 		  }
   	});
 }
+
+
 
 //--------------------------------------------------------------------------------------------------------
 function cambiar_hora_sincrona(){
@@ -280,6 +285,7 @@ function form_actualizar_sesi_general(){
 				$("#ct_form_body").html("<div class='uk-text-center uk-text-primary uk-margin-top'><div uk-spinner></div> Procesando...</div>");
 		  },
 		  success:  function (response) {
+                msg_popup("<i uk-icon='check'></i> Datos actualizados.");
 				 listar_sesi();
 		  }
   	});
@@ -313,13 +319,21 @@ function form_eliminar_sesi(pk){
 
 
 //=============================================================
-function ver_sesion_pdf(pk){
-	if(pk>0){
-		var url='reports/ctrl_reporte_sesion.php?pk_sesion='+pk;
-		ver_msg_modal_pdf("ACTIVIDAD DE APRENDIZAJE",url,"70%","600px");
-	}else{
-		msg_popup("<i class='uk-icon-check'></i> Seleccione un registro.","danger");
-	}
+function ver_sesion_pdf(pk,ver){
+    if(ver=="1"){
+        if(pk>0){
+            var url='reports/ctrl_reporte_sesion.php?pk_sesion='+pk+'&v=1';
+            ver_msg_modal_pdf("ACTIVIDAD DE APRENDIZAJE",url,"70%","600px");
+        }else{
+            msg_popup("<i class='uk-icon-check'></i> Seleccione un registro.","danger");
+        }
+    }else if(ver=="2"){
+        var fk_ud_usuario=$('#txt_fk_ud_usuario').val();
+        var url='reports/ctrl_reporte_sesion.php?pk_sesion='+fk_ud_usuario+'&v=2';
+            ver_msg_modal_pdf("ACTIVIDAD DE APRENDIZAJE",url,"70%","600px");
+        
+    }
 }
+
 
 

@@ -9,11 +9,10 @@ $array_menu=preg_split('[,]', $privilegios);
   while($fila=$ds->fetch_array(MYSQLI_ASSOC)){
 	$pk_menu_grupo=$fila['pk_menu_grupo'];
 	?>
-                                
     <ul class="uk-nav uk-nav-default uk-margin-bottom">
 		<li class="uk-nav-header"><?=$fila['megr_nombre'];?></li>
         <li class="uk-nav-divider"></li>
-		  <?php
+		  <?php  
             $ds_menu=$general->listarRegistros("menu","menu_orden","asc",1,"menu_menu_grupo_fk='$pk_menu_grupo'");		        	
             $tr=$ds_menu->num_rows;
             $n=1;
@@ -49,8 +48,6 @@ $array_menu=preg_split('[,]', $privilegios);
             }//end while
             ?>    
    
-    </ul>
-    
-	
+    </ul>	
 <?php
 } //end while?>    

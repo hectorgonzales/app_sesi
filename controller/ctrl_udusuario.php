@@ -21,11 +21,11 @@ case "list":
      <thead>
             <tr>
                 <th>N°</th>
-                <th data-campo="fk_usuario" class="uk-visible@s">PROGRAMA DE ESTUDIOS</th>
-                <th data-campo="fk_usuario" class="uk-visible@s">TIPO</th>
-				<th data-campo="fk_ud" class="uk-visible@s">UNIDAD DIDACTICA</th>				            
-                <th width="50" data-campo="ud_semestre" class="uk-visible@s">SEMESTRE</th>
-                <th width="50" data-campo="" class="uk-visible@s">MNTO</th>
+                <th data-campo="fk_usuario" class="uk-visible@s uk-visible@l">PROGRAMA DE ESTUDIOS</th>
+                <th data-campo="fk_usuario" class="uk-visible@l">TIPO</th>
+				<th data-campo="fk_ud" class="">UNIDAD DIDACTICA</th>				            
+                <th width="30" data-campo="ud_semestre" class="uk-visible@s uk-visible@l">SEM</th>
+                <th width="30" data-campo="" class="">E</th>
 	</tr>
         </thead>
     <!--Table body-->        
@@ -44,13 +44,13 @@ case "list":
                 $pk_ud=$fila['pk_ud'];
                 $pk_ud_usuario=$fila['pk_ud_usuario'];
 				?>
-				<tr onclick="pasar_pk_fila_lista('#txt_fk_ud_usuario',<?=$pk_ud_usuario;?>); listar_sesi();">
+				<tr  id="fila<?=$fila[$tb_pk];?>" onclick="pasar_pk_fila_lista('#txt_fk_ud_usuario',<?=$pk_ud_usuario;?>); listar_sesi();">
 					<td class="tc bgn" width="30"><?=$n;?></td>
-					<td class="uk-visible@s"><?=$fila['menu_nombre']?></td>
-                    <td class="uk-visible@s"><?=ucfirst($fila['ud_tipo'])?></td>
-					<td class="uk-visible@s"><?=$fila['ud_nombre']?></td>								
-                    <td class="uk-visible@s tc"><?=$fila['ud_semestre']?></td>
-                    <td class="uk-visible@s tc"><a href="#" onClick="form_eliminar_udus('<?=$pk_ud_usuario?>');" class="uk-icon-link" uk-icon="trash"></a></td>
+					<td class="uk-visible@s uk-visible@l"><?=$fila['menu_nombre']?></td>
+                    <td class="uk-visible@l"><?=ucfirst($fila['ud_tipo'])?></td>
+					<td class=""><?=$fila['ud_nombre']?></td>								
+                    <td class="uk-visible@s uk-visible@l tc"><?=$fila['ud_semestre']?></td>
+                    <td class="tc"><a href="#" onClick="form_eliminar_udus('<?=$pk_ud_usuario?>');" class="uk-icon-link" uk-icon="trash" uk-tooltip="Eliminar"></a></td>
 				</tr>               
 				<?php
 				$n++;

@@ -30,7 +30,7 @@ $momento=$_POST['momento'];
                             <textarea rows="4" class="uk-textarea uk-form-small" id="txt_seac_actividad"></textarea>
                          </div>
                          
-                        <div class="uk-width-1-2">
+                        <div class="uk-width-1-2@s">
 							<label>Recurso:</label>
                             <select class="uk-select uk-form-small" id="txt_seac_recurso">
                                 <?php
@@ -43,7 +43,7 @@ $momento=$_POST['momento'];
 							</select>
                         </div>
                         						
-						<div class="uk-width-1-2">
+						<div class="uk-width-1-2@s">
 							<label>Tiempo:</label>
 							<input type="number" class="uk-input uk-form-small enteros" id="txt_seac_tiempo" />
 						</div>
