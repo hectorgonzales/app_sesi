@@ -136,7 +136,7 @@ $codigoHTML.='</head>
 $codigoHTML.='
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 <tr>
-    <td width="30%"><img src="..//resources/images/minedu.png" width="291" /></td>
+    <td width="30%"><img src="..//resources/images/minedu.jpg" width="291" /></td>
     <td width="10%" class="tc"><img src="..//resources/images/logo_ist.png" height="42" /></td>
     <td width="40%"><br><br><b><span class="t2">Instituto de Educación Superior Tecnológico Público Nasca</span></b></td>
     <td width="20%">';
@@ -311,7 +311,7 @@ $ds3=$general->listarRegistros("sesion_actividad","pk_sesion_actividad","asc",1,
 $tr3=$ds3->num_rows+1;
 $codigoHTML.='
 <tr>
-    <td rowspan="'.$tr3.'"><span class="b">Desarrollo</span></td>
+    <td rowspan="'.$tr3.'"><span class="b">Cierre</span></td>
     <td colspan="3" class="bg2"><span class="bb">Estrategias:</span> <span class="b">'.$cierre_estrategia.'</span></td>
 
 </tr>';
@@ -399,6 +399,6 @@ $codigoHTML.='
 //====================================================
 	$pdf->writeHTML($codigoHTML, true, 0, true, 0);
 	$pdf->lastPage();
-	$pdf->output('ficha_sesion.pdf', 'I');
+	$pdf->output('ficha_sesion_'.str_pad($sesi_orden, 2, "0", STR_PAD_LEFT).'.pdf', 'I');
 //====================================================	
 ?>

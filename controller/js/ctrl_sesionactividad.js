@@ -55,14 +55,28 @@ function form_nuevo_seac(fk_sesion,momento){
 function validaForm_seac(op_frm) {  //1 ADD 2 EDIT
 	var a=tinyMCE.get("txt_seac_actividad").getContent();
 	
-	var msg=$("#frm_msg_error");
+	var msg=$("#frm_msg_error2");
 	
-	if(a=="" || a==null){	
+    if(op_frm==1){
+        var tiempo_disponible=$('#txt_tiempo_disponible').val();
+        var seac_tiempo=$('#txt_seac_tiempo').val();
+        if(seac_tiempo > tiempo_disponible){	
+            $("#txt_seac_tiempo").focus();
+            msg.html("<i uk-icon='warning'></i> El tiempo ingresado supera el tiempo disponible.");		
+            msg.show();		
+            return false;
+        }
+    
+    }
+    
+    if(a=="" || a==null){	
 		$("#txt_seac_actividad").focus();
 		msg.html("<i uk-icon='warning'></i> Debe ingresar datos.");		
 		msg.show();		
 		return false;
 	}
+    
+    
 		
 		msg.hide();	
 		

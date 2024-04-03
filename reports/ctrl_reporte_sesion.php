@@ -24,7 +24,7 @@ $pdf = new MYPDF('P', 'mm', 'A4', true, 'UTF-8', false);
 	$pdf->SetAutoPageBreak(true, 20); 
 	$pdf->SetFont('Helvetica', '', 10);
 	$pdf->SetLineWidth(0.1);
-	$pdf->SetMargins(13, 13, 13);
+	$pdf->SetMargins(15, 13, 13);
 	$pdf->SetHeaderMargin(10);
 	$pdf->setListIndentWidth(4);
     $pdf->setPrintHeader(false);
@@ -149,7 +149,7 @@ $v=$_GET['v'];
 $codigoHTML.='
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 <tr>
-    <td width="30%"><img src="..//resources/images/minedu.png" width="291" /></td>
+    <td width="30%"><img src="..//resources/images/minedu.jpg" width="291" /></td>
     <td width="10%" class="tc"><img src="..//resources/images/logo_ist.png" height="42" /></td>
     <td width="40%"><br><br><b><span class="t2">Instituto de Educación Superior Tecnológico Público Nasca</span></b></td>
     <td width="20%">';
@@ -158,13 +158,13 @@ $codigoHTML.='
 
 $codigoHTML.='</td>
 </tr>
-
 </table>
+&nbsp; <br>
 ';
 
 
 $codigoHTML.='
-<table width="100%" border="0" cellpadding="3" cellspacing="0" class="tabla">
+<table width="100%" border="0" cellpadding="6" cellspacing="0" class="tabla">
 <tr>
     <td colspan="7" class="bg1"><span class="t1"><b>SESION SINCRONICA<br>ACTIVIDAD DE APRENDIZAJE N° '.str_pad($sesi_orden, 2, "0", STR_PAD_LEFT).'</b></span></td>
 </tr>
@@ -252,6 +252,7 @@ $codigoHTML.='
     <td colspan="6">'.$plap_logro_sesion.'</td>
 </tr>
 </table>
+<i pagebreak="true"></i>
 ';
 
 
@@ -324,7 +325,7 @@ $ds4=$general->listarRegistros("sesion_actividad","pk_sesion_actividad","asc",1,
 $tr4=$ds4->num_rows+1;
 $codigoHTML.='
 <tr>
-    <td rowspan="'.$tr4.'"><span class="b">Desarrollo</span></td>
+    <td rowspan="'.$tr4.'"><span class="b">Cierre</span></td>
     <td colspan="3" class="bg2"><span class="bb">Estrategias:</span> <span class="b">'.$cierre_estrategia.'</span></td>
 
 </tr>';
@@ -411,6 +412,6 @@ $codigoHTML.='
 //====================================================
 	$pdf->writeHTML($codigoHTML, true, 0, true, 0);
 	$pdf->lastPage();
-	$pdf->output('ficha_sesion.pdf', 'I');
+	$pdf->output('ficha_sesion_'.str_pad($sesi_orden, 2, "0", STR_PAD_LEFT).'.pdf', 'I');
 //====================================================	
 ?>

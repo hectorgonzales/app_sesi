@@ -37,26 +37,36 @@ $momento=$_POST['momento'];
 				echo "<td colspan='6'><div class=\"uk-alert uk-alert-warning uk-margin-top uk-margin-left uk-margin-right\"> No se encontraron registros. </div></td></tr>";
 			}else{
 				$n=1;
+                $tiempo_actvidad_total=0;
 				while($fila=$ds->fetch_array(MYSQLI_ASSOC)){
-                $pk_sesion_actividad=$fila['pk_sesion_actividad'];
-                $cuenta = mb_strpos($fila['seac_actividad'], '</p>') + 5;
-                $sumario = mb_substr($fila['seac_actividad'], 0, $cuenta);
-                $actividad=preg_replace( "/<br>|\n/","", $sumario);
-				?>
-				<tr id="fila<?=$fila[$tb_pk];?>">
-					<td class="tc bgn" width="30"><?=$n;?></td>
-					<td class=""><?=$actividad;?></td>
-					<td class="uk-visible@s"><?=$fila['seac_recurso']?></td>
-					<td class="uk-visible@s tc"><?=$fila['seac_tiempo']." min."?></td>								
-                    <td class="tc"><a href="#" onClick="form_modificar_seac('<?=$pk_sesion_actividad?>');" class="uk-icon-link" uk-icon="file-edit"></a></td>
-                    <td class="tc"><a href="#" onClick="form_eliminar_seac('<?=$pk_sesion_actividad?>');" class="uk-icon-link" uk-icon="trash"></a></td>
-				</tr>               
-				<?php
-				$n++;
+                    $pk_sesion_actividad=$fila['pk_sesion_actividad'];
+                    $cuenta = mb_strpos($fila['seac_actividad'], '</p>') + 5;
+                    $sumario = mb_substr($fila['seac_actividad'], 0, $cuenta);
+                    $actividad=preg_replace( "/<br>|\n/","", $sumario);
+                    $tiempo=(trim($fila['seac_tiempo'])=="" || is_null($fila['seac_tiempo']))?0:$fila['seac_tiempo'];
+                    $tiempo_actvidad_total+=$tiempo;
+                    ?>
+                    <tr id="fila<?=$fila[$tb_pk];?>">
+                        <td class="tc bgn" width="30"><?=$n;?></td>
+                        <td class=""><?=$actividad;?></td>
+                        <td class="uk-visible@s"><?=$fila['seac_recurso']?></td>
+                        <td class="uk-visible@s tc"><?=$tiempo." min."?></td>								
+                        <td class="tc"><a href="#" onClick="form_modificar_seac('<?=$pk_sesion_actividad?>');" class="uk-icon-link" uk-icon="file-edit"></a></td>
+                        <td class="tc"><a href="#" onClick="form_eliminar_seac('<?=$pk_sesion_actividad?>');" class="uk-icon-link" uk-icon="trash"></a></td>
+                    </tr>               
+                    <?php
+                    $n++;
 				} //fin while
 			} //fin si
 			?>
     </tbody>
+    <tfoot>
+        <tr class="td_finales no_hand">
+        <td colspan="3" class="tr td_sb">Total de Minutos:</td>
+        <td class="tc"><?=$tiempo_actvidad_total;?> min</td>
+        <td colspan="2" class="td_sb"></td>
+        </tr>
+    </tfoot>
     <!--Table body-->
 </table>
 <!--Table-->
@@ -102,6 +112,25 @@ $ds=$general->modificarRegistro($tb,$tb_pk,$pk);
 $fila=$ds->fetch_assoc();
 ?>
 
+<?php      
+$fk_sesion=$fila['fk_sesion'];
+$ds2=$general->listarRegistros("sesion_actividad","pk_sesion_actividad","asc",1,"fk_sesion='$fk_sesion'");			        	
+
+    $tiempo_actvidad_total=0;
+    while($fila2=$ds2->fetch_array(MYSQLI_ASSOC)){
+        $tiempo=$fila2['seac_tiempo'];
+        $tiempo_actvidad_total+=$tiempo;
+    } //fin while
+
+$horas_sesion = $general->valorCampo("sesion","sesi_horas","pk_sesion='$fk_sesion'");
+$minutos_sesion=$horas_sesion*45;
+$tiempo_disponible = $minutos_sesion - $tiempo_actvidad_total;
+$color_label="uk-label-danger";
+if($tiempo_disponible>0){
+    $color_label="uk-label-success";
+}
+?>
+
 <form class="uk-grid-small uk-form uk-grid-match" uk-grid>
     <?php /*--*/?>
     <input type="hidden" name="pk_edit" id="txt_seac_pk" value="<?=$fila[$tb_pk]?>" />
@@ -134,8 +163,9 @@ $fila=$ds->fetch_assoc();
                         </div>
                         						
 						<div class="uk-width-1-2@s">
-							<label>Tiempo:</label>
+							<label>Tiempo: </label>
 							<input type="number" class="uk-input uk-form-small enteros" id="txt_seac_tiempo" value="<?=$fila['seac_tiempo'];?>" />
+                            <input type="hidden" id="txt_tiempo_disponible" value="<?=$tiempo_disponible;?>"/>
 						</div>
                     <!--CAMPOS-->
         </div>

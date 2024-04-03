@@ -44,9 +44,11 @@ case "list":
                                       <div class="uk-card-footer uk-padding-remove-horizontal uk-padding-remove-bottom">
                                             <a href="#" onClick="modificar_sesion('<?=$pk_sesion?>');" class="uk-icon-link" uk-icon="file-edit" uk-tooltip="Modificar"></a>
                                             <a href="#" onClick="duplicar_sesion('<?=$pk_sesion?>');" class="uk-icon-link" uk-icon="copy" uk-tooltip="Duplicar"></a>
-                                            <a href="#" onClick="ver_sesion_pdf('<?=$pk_sesion?>','1');" class="uk-icon-link uk-margin-small-right" uk-icon="file-pdf" uk-tooltip="Ver PDF"></a>
+                                            <!--<a href="#" onClick="ver_sesion_pdf('<?=$pk_sesion?>','1');" class="uk-icon-link uk-margin-small-right" uk-icon="file-pdf" uk-tooltip="Ver PDF"></a>-->
                                             <a href="#" onClick="form_eliminar_sesi('<?=$pk_sesion?>');" class="uk-icon-link" uk-icon="trash" uk-tooltip="Eliminar"></a>
-                                            <span class="uk-badge <?=$bg_badge?> uk-float-right fs10">Actividad N° <?=$fila['sesi_orden'];?></span>
+                                            <a href="#" onClick="ver_sesion_pdf('<?=$pk_sesion?>','1');">
+                                            <span class="uk-badge <?=$bg_badge?> uk-float-right fs10"> Ver Actividad N° <?=$fila['sesi_orden'];?></span>
+                                            </a>
                                       </div>
                                   </div>
                          </li>
@@ -458,7 +460,7 @@ $sesi_ud=mb_strtoupper($fila['sesi_ud']);
                                                 </div>
                                                 <div class="uk-width-1-1">
                                                     <label>Logro de la sesión:</label>
-                                                    <textarea rows="2" class="uk-textarea uk-form-small" id="txt_plap_logro_sesion"><?=$fila['plap_logro_sesion']?></textarea>
+                                                    <textarea rows="2" class="uk-textarea uk-form-small" id="txt_plap_logro_sesion" onChange="pasar_logro_sesion();"><?=$fila['plap_logro_sesion']?></textarea>
                                                 </div>
                                                 
 

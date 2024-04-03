@@ -17,6 +17,24 @@ case "new":
 $fk_sesion=$_POST['fk_sesion'];
 $momento=$_POST['momento'];
 ?>
+<?php       
+$ds=$general->listarRegistros("sesion_actividad","pk_sesion_actividad","asc",1,"fk_sesion='$fk_sesion'");			        	
+
+    $tiempo_actvidad_total=0;
+    while($fila=$ds->fetch_array(MYSQLI_ASSOC)){
+        $tiempo=$fila['seac_tiempo'];
+        $tiempo_actvidad_total+=$tiempo;
+    } //fin while
+
+$horas_sesion = $general->valorCampo("sesion","sesi_horas","pk_sesion='$fk_sesion'");
+$minutos_sesion=$horas_sesion*45;
+$tiempo_disponible = $minutos_sesion - $tiempo_actvidad_total;
+$color_label="uk-label-danger";
+if($tiempo_disponible>0){
+    $color_label="uk-label-success";
+}
+?>
+            
  <form class="uk-grid-small uk-form uk-grid-match" uk-grid>
     <div class="uk-width-1-1@s">
         <div class="uk-card uk-card-default uk-card-body">
@@ -30,7 +48,7 @@ $momento=$_POST['momento'];
                             <textarea rows="4" class="uk-textarea uk-form-small" id="txt_seac_actividad"></textarea>
                          </div>
                          
-                        <div class="uk-width-1-2@s">
+                        <div class="uk-width-1-3@s">
 							<label>Recurso:</label>
                             <select class="uk-select uk-form-small" id="txt_seac_recurso">
                                 <?php
@@ -42,10 +60,11 @@ $momento=$_POST['momento'];
                                   }//end while?>
 							</select>
                         </div>
-                        						
-						<div class="uk-width-1-2@s">
-							<label>Tiempo:</label>
+                        
+                        <div class="uk-width-1-3@s">
+							<label>Tiempo:(Tiempo disponible  <span class="uk-badge <?=$color_label;?>"><?=$tiempo_disponible;?></span>) </label>
 							<input type="number" class="uk-input uk-form-small enteros" id="txt_seac_tiempo" />
+                            <input type="hidden" id="txt_tiempo_disponible" value="<?=$tiempo_disponible;?>"/>
 						</div>
                     <!--CAMPOS-->
         </div>

@@ -66,7 +66,7 @@ function modificar_sesion(pk){
 //--------------------------------------------------------------------------------------------------------
 function cambiar_hora_sincrona(){
     var horas=$("#txt_sesi_horas").val();
-    var horas_min=horas*60;
+    var horas_min=horas*45;
     var horas_asinc=$("#txt_sesi_hora_asincrona").val();
     var horas_sinc=horas_min-horas_asinc;
     
@@ -135,6 +135,15 @@ function listar_eva_tec_instrumentos(pk_eva_tecnica, fk_eva_tecnica_instrumento)
 		  }
   	});
 }
+
+
+//--------------------------------------------------------------------------------------------------------
+function pasar_logro_sesion(){
+    var logro_sesion=$("#txt_plap_logro_sesion").val();
+    var logro = logro_sesion.replace("Al finalizar la sesión, el estudiante", "").trim();
+    $("#txt_eva_indicador_logro").val(logro.charAt(0).toUpperCase() + logro.slice(1));
+}
+
 
 //--------------------------------------------------------------------------------------------------------
 function duplicar_sesion(pk){

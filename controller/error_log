@@ -1,0 +1,16 @@
+[27-Mar-2024 01:44:29 Europe/London] PHP Notice:  Undefined index: pk_usuario in /home/persson/public_html/sesi/controller/ctrl_sesion.php on line 6
+[27-Mar-2024 01:44:29 Europe/London] PHP Notice:  Undefined index: usua_usuario in /home/persson/public_html/sesi/controller/ctrl_sesion.php on line 7
+[02-Apr-2024 12:44:47 America/Lima] PHP Notice:  Undefined index: usua_privilegios in /home/persson/public_html/sesi/controller/ctrl_competenciaespecifica.php on line 13
+[02-Apr-2024 12:44:47 America/Lima] PHP Notice:  Undefined index: usua_privilegios in /home/persson/public_html/sesi/controller/ctrl_competenciaempleabilidad.php on line 13
+[02-Apr-2024 12:45:06 America/Lima] PHP Notice:  Undefined index: usua_privilegios in /home/persson/public_html/sesi/controller/ctrl_competenciaempleabilidad.php on line 13
+[02-Apr-2024 12:45:06 America/Lima] PHP Notice:  Undefined index: usua_privilegios in /home/persson/public_html/sesi/controller/ctrl_competenciaespecifica.php on line 13
+[02-Apr-2024 14:54:08 America/Lima] PHP Notice:  Undefined index: fk_ud_usuario in /home/persson/public_html/sesi/controller/ctrl_sesion.php on line 22
+[02-Apr-2024 15:02:36 America/Lima] PHP Notice:  Undefined index: fk_ud_usuario in /home/persson/public_html/sesi/controller/ctrl_sesion.php on line 22
+[02-Apr-2024 15:03:19 America/Lima] PHP Notice:  Undefined variable: tiempo_actvidad_total in /home/persson/public_html/sesi/controller/ctrl_sesionactividad.php on line 66
+[02-Apr-2024 15:03:19 America/Lima] PHP Notice:  Undefined variable: tiempo_actvidad_total in /home/persson/public_html/sesi/controller/ctrl_sesionactividad.php on line 66
+[02-Apr-2024 15:03:19 America/Lima] PHP Notice:  Undefined variable: tiempo_actvidad_total in /home/persson/public_html/sesi/controller/ctrl_sesionactividad.php on line 66
+[02-Apr-2024 15:04:24 America/Lima] PHP Notice:  Undefined index: fk_ud_usuario in /home/persson/public_html/sesi/controller/ctrl_sesion.php on line 22
+[02-Apr-2024 15:06:22 America/Lima] PHP Notice:  Undefined index: fk_ud_usuario in /home/persson/public_html/sesi/controller/ctrl_sesion.php on line 22
+[02-Apr-2024 15:11:06 America/Lima] PHP Notice:  Undefined index: fk_ud_usuario in /home/persson/public_html/sesi/controller/ctrl_sesion.php on line 22
+[02-Apr-2024 15:12:07 America/Lima] PHP Notice:  Undefined index: fk_ud_usuario in /home/persson/public_html/sesi/controller/ctrl_sesion.php on line 22
+[02-Apr-2024 15:12:25 America/Lima] PHP Notice:  Undefined index: fk_ud_usuario in /home/persson/public_html/sesi/controller/ctrl_sesion.php on line 22
