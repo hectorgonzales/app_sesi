@@ -27,7 +27,7 @@ $ds=$general->listarRegistros("sesion_actividad","pk_sesion_actividad","asc",1,"
     } //fin while
 
 $horas_sesion = $general->valorCampo("sesion","sesi_horas","pk_sesion='$fk_sesion'");
-$minutos_sesion=$horas_sesion*45;
+$minutos_sesion=$horas_sesion*HORA_PEDAGOGICA;
 $tiempo_disponible = $minutos_sesion - $tiempo_actvidad_total;
 $color_label="uk-label-danger";
 if($tiempo_disponible>0){

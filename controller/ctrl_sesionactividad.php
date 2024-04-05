@@ -30,14 +30,15 @@ $momento=$_POST['momento'];
     <!--Table body-->        
     <tbody>
     	<?php
-        
+            $tiempo_actvidad_total=0;
 			$ds=$general->listarRegistros($tb,$tb_pk,"asc",1,"seac_momento='$momento' AND fk_sesion='$fk_sesion'");			        	
 			$tr=$ds->num_rows;
+
 			if ($tr==0){
 				echo "<td colspan='6'><div class=\"uk-alert uk-alert-warning uk-margin-top uk-margin-left uk-margin-right\"> No se encontraron registros. </div></td></tr>";
 			}else{
 				$n=1;
-                $tiempo_actvidad_total=0;
+                
 				while($fila=$ds->fetch_array(MYSQLI_ASSOC)){
                     $pk_sesion_actividad=$fila['pk_sesion_actividad'];
                     $cuenta = mb_strpos($fila['seac_actividad'], '</p>') + 5;
@@ -123,7 +124,7 @@ $ds2=$general->listarRegistros("sesion_actividad","pk_sesion_actividad","asc",1,
     } //fin while
 
 $horas_sesion = $general->valorCampo("sesion","sesi_horas","pk_sesion='$fk_sesion'");
-$minutos_sesion=$horas_sesion*45;
+$minutos_sesion=$horas_sesion*HORA_PEDAGOGICA;
 $tiempo_disponible = $minutos_sesion - $tiempo_actvidad_total;
 $color_label="uk-label-danger";
 if($tiempo_disponible>0){

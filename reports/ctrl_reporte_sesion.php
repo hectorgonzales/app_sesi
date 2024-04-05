@@ -59,6 +59,7 @@ $codigoHTML.='</head>
 <body>';
 
 //--------------------------------------------------------------------
+$horaPedagogica=45;
 $pk=$_GET['pk_sesion'];
 $v=$_GET['v'];
     if($v=='1'){
@@ -186,7 +187,7 @@ $codigoHTML.='
     <td width="25%" class="tc">Asincrónicas</td>
 </tr>
 <tr>
-    <td class="tc">('.$sesi_hora_sincrona.' min.)</td>
+    <td class="tc">'.$sesi_horas.' Hrs ('.$sesi_hora_sincrona.' min.)</td>
     <td class="tc">('.$sesi_hora_asincrona.' min.)</td>
 </tr>
 <tr>
@@ -234,7 +235,7 @@ $codigoHTML.='
 </tr>
 <tr>
     <td><span class="b">1.11 Fecha de desarrollo:</span></td>
-    <td colspan="6">'.date("d/m/Y",strtotime($sesi_fecha)).'</td>
+    <td colspan="6">'.$sesi_fecha.'</td>
 </tr>
 <tr>
     <th colspan="7">II. PLANIFICACIÓN DEL APRENDIZAJE</th>

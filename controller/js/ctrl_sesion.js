@@ -61,8 +61,6 @@ function modificar_sesion(pk){
   	});
 }
 
-
-
 //--------------------------------------------------------------------------------------------------------
 function cambiar_hora_sincrona(){
     var horas=$("#txt_sesi_horas").val();
@@ -73,6 +71,10 @@ function cambiar_hora_sincrona(){
     $("#txt_sesi_hora_sincrona").val(horas_sinc);
 }
 
+//--------------------------------------------------------------------------------------------------------
+function borrar_fechas(){
+	$('#txt_sesi_fecha').multiDatesPicker('resetDates');
+}
 
 //--------------------------------------------------------------------------------------------------------
 function listar_capacidad_logro(fks_capacidad_logro){
@@ -191,7 +193,13 @@ function actualizar_ordenar_sesi(){
 
 //--------------------------------------------------------------------------------------------------------
 function validaForm_sesi(op_frm) {  //1 ADD 2 EDIT
-		
+	var sesi_fecha=$('#txt_sesi_fecha').multiDatesPicker('value');
+	if(sesi_fecha=="" || sesi_fecha==null){	
+		$("#txt_sesi_fecha").focus();
+		msg_popup("<i uk-icon='info'></i> Debe ingresar una fecha.","danger","2000");	
+		return false;
+	}
+
 	if(op_frm==1){
 		form_actualizar_sesi_general();
 	}else if(op_frm==2){
@@ -234,7 +242,8 @@ function form_actualizar_sesi_general(){
 		var sesi_tipo_presencial=$('#txt_sesi_tipo_presencial').prop('checked');
 		var sesi_tipo_virtsincrono=$('#txt_sesi_tipo_virtsincrono').prop('checked');
 		var sesi_tipo_virtasincrono=$('#txt_sesi_tipo_virtasincrono').prop('checked');
-		var sesi_fecha=$('#txt_sesi_fecha').val();
+		//var sesi_fecha=$('#txt_sesi_fecha').val();
+		var sesi_fecha=$('#txt_sesi_fecha').multiDatesPicker('value');		
 		var plap_indicador_competencia=$('#txt_plap_indicador_competencia').val();
 		var plap_indicador_capacidad=$('#txt_plap_indicador_capacidad').val();
 		var plap_logro_sesion=$('#txt_plap_logro_sesion').val();

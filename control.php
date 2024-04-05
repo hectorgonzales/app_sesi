@@ -16,7 +16,9 @@ date_default_timezone_set('America/Lima');
     <title>SESI v.01</title>        
     <link rel="stylesheet" href="resources/css/uikit.min.css" />
      <link rel="stylesheet" href="resources/css/estilo.css" />
-
+     
+     <link rel="stylesheet" href="resources/css/jquery-ui.min.css" />
+     <link rel="stylesheet" href="resources/css/jquery-ui.multidatespicker.css" />
      
     <script src="resources/js/jquery-3.6.0.min.js"></script>
     <script src="resources/js/uikit.min.js"></script>
@@ -174,6 +176,10 @@ include_once('menu.php');
 <script src="tinymce/tinymce.min.js" language="javascript"></script>
 <script src="resources/js/persson_main.js"></script>
 <script src="resources/js/persson_crud.js"></script>
-<script src="resources/js/persson_validate.js"></script>      
+<script src="resources/js/persson_validate.js"></script>
+
+<script src="resources/js/jquery-ui.min.js"></script>
+<script src="resources/js/jquery-ui.multidatespicker.js"></script>
+
 </body>
 </html>

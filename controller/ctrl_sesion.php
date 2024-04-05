@@ -100,7 +100,7 @@ $fila_ud=$ds_ud->fetch_assoc();
         $fk_modulo=$fila_ud['fk_modulo'];
         $ud_nombre=$fila_ud['ud_nombre'];
         $ud_horas=$fila_ud['ud_horas'];
-        $ud_horas_min=$ud_horas*60;
+        $ud_horas_min=$ud_horas*HORA_PEDAGOGICA;
         $ud_semestre=$fila_ud['ud_semestre'];
             $periodo="I";
             switch($ud_semestre){
@@ -179,7 +179,7 @@ $sesi_act_teopractico=1;
 $sesi_tipo_presencial=1;
 $sesi_tipo_virtsincrono=0;
 $sesi_tipo_virtasincrono=0;
-$sesi_fecha=date("Y-m-d");
+$sesi_fecha=date("d/m/Y");
 $plap_indicador_competencia=addslashes($calo_descripcion);
 $plap_indicador_capacidad="";
 $plap_logro_sesion="";
@@ -289,15 +289,42 @@ $sesi_ud=mb_strtoupper($fila['sesi_ud']);
                                                 <div class="uk-width-1-1@s">
                                                     <h4 class="uk-text-muted uk-background-muted">INFORMACIÓN GENERAL</h4>
                                                 </div>                                                
-                                                <div class="uk-width-1-2 uk-width-1-4@s">
-                                                    <label>Fecha de desarrollo:</label>
-                                                    <input type="date" class="uk-input uk-form-small" id="txt_sesi_fecha" value="<?=$fila['sesi_fecha']?>" />
-                                                </div>                                                
-                                                <div class="uk-width-1-2 uk-width-1-4@s">
+                                                <div class="uk-width-1-2 uk-width-2-5@s">
+                                                    <label>Fecha de desarrollo:</label><br>
+                                                    <?php
+                                                        $hoy=date("d/m/Y");
+                                                        $strFechas="'".$hoy."'";
+                                                        $fechaDefault=$hoy;
+                                                        if(!empty($fila['sesi_fecha'])){
+                                                            $array_fechas=preg_split('[,]', $fila['sesi_fecha']);
+                                                            $strFechas="";
+                                                            $t_array_fechas=count($array_fechas);
+                                                            $fechaDefault=trim($array_fechas[0]);
+                                                            for($i=0;$i<$t_array_fechas;$i++){
+                                                                $strFechas.="'".trim($array_fechas[$i])."',";                                                           
+                                                            }      
+                                                            $strFechas = substr($strFechas, 0, -1);
+                                                        }
+                                                    ?>                                                   
+                                                    <div class="uk-inline uk-width-1-1">
+                                                        <a class="uk-form-icon uk-form-icon-flip" href="#" onclick="borrar_fechas();" uk-icon="icon: trash"></a>
+                                                        <input class="uk-input uk-form-small" type="text" id="txt_sesi_fecha">
+                                                    </div>
+
+                                                    <script>
+                                                        $('#txt_sesi_fecha').multiDatesPicker({
+                                                            dateFormat: "dd/mm/yy",
+                                                            addDates: [<?=$strFechas?>],
+                                                            defaultDate:"<?=$fechaDefault?>"
+                                                        });
+                                                    </script>
+
+                                                </div>
+                                                <div class="uk-width-1-2 uk-width-1-5@s">
                                                     <label>Total de Horas Actividad:</label>
                                                     <select class="uk-select uk-form-small" id="txt_sesi_horas" >
                                                         <?php
-                                                        for($hs=1;$hs<11;$hs++){
+                                                        for($hs=1;$hs<25;$hs++){
                                                         ?>
                                                             <option onClick="cambiar_hora_sincrona();" <?php if($fila['sesi_horas']==$hs){echo "selected='selected'";}?>><?=$hs?></option>
                                                         <?php
@@ -305,11 +332,11 @@ $sesi_ud=mb_strtoupper($fila['sesi_ud']);
                                                         ?>
                                                     </select>
                                                 </div>
-                                                <div class="uk-width-1-2 uk-width-1-4@s">
+                                                <div class="uk-width-1-2 uk-width-1-5@s">
                                                     <label>Hora sincrona (Min.):</label>
                                                     <input type="text" class="uk-input uk-form-small mayus" id="txt_sesi_hora_sincrona" disabled value="<?=$fila['sesi_hora_sincrona']?>" />
                                                 </div>
-                                                <div class="uk-width-1-2 uk-width-1-4@s">
+                                                <div class="uk-width-1-2 uk-width-1-5@s">
                                                     <label>Hora asincrona (Min.):</label>
                                                     <select class="uk-select uk-form-small mayus" id="txt_sesi_hora_asincrona" >
                                                         <?php
@@ -629,11 +656,33 @@ $sesi_ud=mb_strtoupper($fila['sesi_ud']);
 </div>
 
 <script>
-listar_capacidad_logro('<?=$fks_capacidad_logro?>');
-listar_seac("<?=$pk?>","inicio");
-listar_seac("<?=$pk?>","desarrollo");
-listar_seac("<?=$pk?>","cierre");
-listar_eva_tec_instrumentos('<?=$fk_eva_tecnica?>','<?=$fk_eva_tecnica_instrumento?>');
+    listar_capacidad_logro('<?=$fks_capacidad_logro?>');
+    listar_seac("<?=$pk?>","inicio");
+    listar_seac("<?=$pk?>","desarrollo");
+    listar_seac("<?=$pk?>","cierre");
+    listar_eva_tec_instrumentos('<?=$fk_eva_tecnica?>','<?=$fk_eva_tecnica_instrumento?>');
+
+    $.datepicker.regional['es'] = {
+        closeText: 'Cerrar',
+        prevText: '< Ant',
+        nextText: 'Sig >',
+        currentText: 'Hoy',
+        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+        monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+        dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Juv', 'Vie', 'Sáb'],
+        dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+        weekHeader: 'Sm',
+        dateFormat: 'dd/mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showMonthAfterYear: false,
+        yearSuffix: ''
+        };
+        $.datepicker.setDefaults($.datepicker.regional['es']);
+
+        
+        
 </script>
 <?php
 break; //FIN DE NEW
@@ -798,7 +847,8 @@ $sesi_tipo_presencial=($_POST['sesi_tipo_presencial']=="false") ? "0" : "1";
 $sesi_tipo_virtsincrono=($_POST['sesi_tipo_virtsincrono']=="false") ? "0" : "1";
 $sesi_tipo_virtasincrono=($_POST['sesi_tipo_virtasincrono']=="false") ? "0" : "1";
 $sesi_fecha=$_POST['sesi_fecha'];
-$sesi_anio=date("Y", strtotime($sesi_fecha));
+//$sesi_anio=date("Y", strtotime($sesi_fecha));
+$sesi_anio=date("Y");
 $plap_indicador_competencia=addslashes($_POST['plap_indicador_competencia']);
 $plap_indicador_capacidad=addslashes($_POST['plap_indicador_capacidad']);
 $plap_logro_sesion=addslashes($_POST['plap_logro_sesion']);
